@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VoyageAI Privacy Policy & Terms of Service — Transparent legal standards on how we protect your information, govern Google Gemini 3.8 Flash AI reasoning, and respect your GDPR and CCPA rights.">
+  <title>Privacy Policy &amp; Terms of Service — VoyageAI</title>
+
+  <!-- Anti-flicker Dark Mode Init -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('voyageai_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Gold Scroll Progress Bar -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">✈</span>
+        <span class="logo-text">Voyage<span class="text-gold">AI</span></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="destinations.html" class="nav-link">Destinations</a>
+        <a href="chat.html" class="nav-link">Plan My Trip</a>
+        <a href="privacy.html" class="nav-link active">Privacy Policy</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="navThemeToggle" aria-label="Toggle dark mode" title="Switch between dark and light mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <a href="chat.html" class="btn btn-sm btn-gold nav-cta-btn">
+          <i class="fas fa-paper-plane"></i> Plan Trip
+        </a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PRIVACY HERO ===== -->
+  <header class="privacy-hero">
+    <div class="privacy-hero-content">
+      <span class="privacy-hero-badge"><i class="fas fa-shield-alt text-gold"></i> TRUST &amp; TRANSPARENCY</span>
+      <h1 class="privacy-hero-title">Privacy, Security &amp; Legal Terms</h1>
+      <p class="privacy-hero-subtitle">
+        VoyageAI is built on uncompromising standards of data protection, client privacy, and responsible AI governance. Learn how your travel inquiries are protected and processed by Google Gemini 3.8 Flash.
+      </p>
+      <div class="privacy-trust-bar">
+        <span class="trust-badge"><i class="fas fa-lock"></i> 256-Bit TLS Encryption</span>
+        <span class="trust-badge"><i class="fas fa-user-shield"></i> GDPR &amp; CCPA Compliant</span>
+        <span class="trust-badge"><i class="fas fa-bolt"></i> Google Gemini 3.8 Flash</span>
+        <span class="trust-badge"><i class="fas fa-calendar-check"></i> Last Revised: October 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== PRIVACY CONTENT SECTION ===== -->
+  <div class="privacy-page-wrapper">
+    <div class="privacy-grid-container">
+
+      <!-- ===== STICKY TABLE OF CONTENTS SIDEBAR ===== -->
+      <aside class="privacy-sidebar">
+        <div class="privacy-sidebar-card">
+          <div class="toc-header">
+            <h3><i class="fas fa-list-ul text-gold"></i> Navigation</h3>
+            <span class="badge-sm" style="font-size: 0.72rem; color: #C9A96E; font-weight: 600;">11 Sections</span>
+          </div>
+
+          <ul class="toc-nav-list">
+            <li class="toc-nav-item">
+              <a href="#introduction" class="toc-link active"><span class="toc-num">01</span> Introduction &amp; Scope</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#ai-architecture" class="toc-link"><span class="toc-num">02</span> Gemini 3.8 Flash AI Ethics</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#information-we-collect" class="toc-link"><span class="toc-num">03</span> Information We Collect</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#how-we-use" class="toc-link"><span class="toc-num">04</span> How We Use Your Data</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#data-storage" class="toc-link"><span class="toc-num">05</span> Data Security &amp; Storage</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#third-party" class="toc-link"><span class="toc-num">06</span> Third-Party Integrations</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#cookies" class="toc-link"><span class="toc-num">07</span> Cookies &amp; Local Storage</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#your-rights" class="toc-link"><span class="toc-num">08</span> Your Rights (GDPR / CCPA)</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#children" class="toc-link"><span class="toc-num">09</span> Children &amp; Transfers</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#terms-of-service" class="toc-link"><span class="toc-num">10</span> Terms &amp; Disclaimer</a>
+            </li>
+            <li class="toc-nav-item">
+              <a href="#contact-us" class="toc-link"><span class="toc-num">11</span> Legal &amp; Developer Contact</a>
+            </li>
+          </ul>
+
+          <div class="toc-sidebar-actions">
+            <button class="btn-print-policy" onclick="window.print()">
+              <i class="fas fa-print"></i> Print Document
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ===== MAIN LEGAL ARTICLES ===== -->
+      <main class="privacy-main-content">
+
+        <!-- Section 1: Introduction -->
+        <article id="introduction" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-balance-scale"></i></div>
+            <h2>1. Introduction &amp; Legal Basis</h2>
+          </div>
+          <p>
+            Welcome to <strong>VoyageAI</strong> ("we", "our", "us"). We provide an artificial intelligence-driven luxury travel concierge that assists users worldwide in discovering travel itineraries, evaluating real-time 2026 airfare benchmarks, handpicking accommodations, and planning bespoke holidays.
+          </p>
+          <p>
+            This Privacy Policy explains how personal and behavioral information is collected, stored, processed, and safeguarded across all VoyageAI platforms. By engaging with our website or querying our AI travel assistant, you acknowledge the practices described herein.
+          </p>
+          <div class="privacy-callout">
+            <div class="privacy-callout-icon"><i class="fas fa-check-double"></i></div>
+            <div class="privacy-callout-text">
+              <p><strong>Our Core Privacy Commitment:</strong> VoyageAI never monetizes or sells your personal information, travel queries, or chat logs to third-party ad networks or data brokers. All recommendations are generated solely for your itinerary.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Section 2: Gemini 3.8 Flash AI Architecture & Data Ethics -->
+        <article id="ai-architecture" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-brain"></i></div>
+            <h2>2. Google Gemini 3.8 Flash AI Architecture &amp; Data Ethics</h2>
+          </div>
+          <p>
+            VoyageAI uses Google’s state-of-the-art <strong>Gemini 3.8 Flash</strong> foundation model to power its conversational trip planning and live price retrieval. Because our agent handles natural language travel inquiries, we adhere to strict AI data governance principles:
+          </p>
+
+          <div class="privacy-callout">
+            <div class="privacy-callout-icon"><i class="fas fa-microchip"></i></div>
+            <div class="privacy-callout-text">
+              <p><strong>Gemini 3.8 Flash Intelligence Engine:</strong> Queries submitted in the chat interface are processed via high-performance Google AI API channels. Sessions are ephemeral and encrypted in memory during execution.</p>
+            </div>
+          </div>
+
+          <ul class="privacy-checklist">
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Zero Model Training On Private Logs:</strong> We do not authorize or allow your personal chat messages or travel dates to be used by Google or VoyageAI to train general public generative models.</span>
+            </li>
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Live Real-Time Web Search Grounding:</strong> Gemini 3.8 Flash verifies real-world 2026 airline prices and destination guidelines using Google Search Grounding to guarantee fresh, factual figures.</span>
+            </li>
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Client-Side Session Isolation:</strong> Multi-turn conversation state resides in your browser's local memory (`sessionStorage`) and can be flushed completely at any moment using the "New Trip" button.</span>
+            </li>
+            <li>
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Google AI Studio Governance:</strong> API interactions comply strictly with Google's API Terms and Enterprise Privacy Safeguards. You may review Google's official privacy policies at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style="color: #C9A96E; text-decoration: underline;">policies.google.com/privacy</a>.</span>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Section 3: Information We Collect -->
+        <article id="information-we-collect" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-folder-open"></i></div>
+            <h2>3. Information We Collect</h2>
+          </div>
+          <p>We restrict data collection to what is essential to engineer your personalized travel itineraries and ensure smooth web operations:</p>
+
+          <div class="info-grid">
+            <div class="info-item-card">
+              <h4><i class="fas fa-user-circle"></i> Contact Details</h4>
+              <p>Name, email address, or phone number submitted voluntarily through direct contact inquiries or support channels.</p>
+            </div>
+            <div class="info-item-card">
+              <h4><i class="fas fa-map-marked-alt"></i> Trip Preferences</h4>
+              <p>Target destinations (Europe, Dubai, US, Egypt), party composition (solo, honeymoon, family), duration, dates, and budget estimates.</p>
+            </div>
+            <div class="info-item-card">
+              <h4><i class="fas fa-laptop-code"></i> Technical Telemetry</h4>
+              <p>Browser user agent, IP address, device type, display resolution, and theme selection (`dark` or `light`) for responsive rendering.</p>
+            </div>
+            <div class="info-item-card">
+              <h4><i class="fas fa-key"></i> Client API Tokens (Optional)</h4>
+              <p>If you enter your own Google Gemini Studio API key, it is saved securely in your browser's `localStorage` and never transmitted to external third parties.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Section 4: How We Use Your Data -->
+        <article id="how-we-use" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-cogs"></i></div>
+            <h2>4. Purposes of Data Processing</h2>
+          </div>
+          <p>We process collected data exclusively under the following lawful bases and operational purposes:</p>
+          <ul class="privacy-checklist">
+            <li><i class="fas fa-check-circle"></i> <strong>Itinerary Generation:</strong> Synthesizing customized day-by-day schedules with dining, cultural excursions, and flight advice tailored to your budget.</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Real-Time Price Discovery:</strong> Comparing roundtrip flight options from major carriers (e.g. Emirates, Delta, Lufthansa, EgyptAir) to ensure cost transparency.</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Service Security &amp; Health Monitoring:</strong> Preventing malicious traffic spikes, enforcing rate-limiting, and maintaining 99.9% uptime.</li>
+            <li><i class="fas fa-check-circle"></i> <strong>UI/UX Personalization:</strong> Remembering your Dark/Light mode visual preference and active consultation states across page transitions.</li>
+          </ul>
+        </article>
+
+        <!-- Section 5: Data Security & Storage -->
+        <article id="data-storage" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-shield-virus"></i></div>
+            <h2>5. Data Security, Cloud Infrastructure &amp; Encryption</h2>
+          </div>
+          <p>
+            We implement comprehensive technical and organizational safeguards designed to prevent unauthorized access, disclosure, or destruction of client information:
+          </p>
+          <ul class="privacy-checklist">
+            <li><i class="fas fa-lock"></i> <strong>256-Bit TLS In-Transit Encryption:</strong> Every byte transferred between your browser, our Node.js backend server, and the Google Gemini API is encrypted via modern HTTPS/TLS protocols.</li>
+            <li><i class="fas fa-server"></i> <strong>Sanitized Memory Footprint:</strong> Server-side in-memory chat payloads are immediately released upon completion of response streaming.</li>
+            <li><i class="fas fa-user-lock"></i> <strong>Strict Access Controls:</strong> Server infrastructure and development keys are isolated with multi-factor authentication and role-based access.</li>
+          </ul>
+        </article>
+
+        <!-- Section 6: Third-Party Integrations -->
+        <article id="third-party" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-cubes"></i></div>
+            <h2>6. Third-Party Ecosystem &amp; API Partners</h2>
+          </div>
+          <p>VoyageAI partners with industry-leading infrastructure providers to deliver its visual and computational experience:</p>
+
+          <div class="ecosystem-grid">
+            <div class="ecosystem-card">
+              <div class="eco-icon"><i class="fas fa-brain"></i></div>
+              <div class="eco-info">
+                <h4>Google Gemini 3.8 Flash</h4>
+                <p>Enterprise AI foundation model providing natural language comprehension, pricing analysis, and real-time grounding.</p>
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="eco-link">Google Privacy Policy <i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+
+            <div class="ecosystem-card">
+              <div class="eco-icon"><i class="fas fa-images"></i></div>
+              <div class="eco-info">
+                <h4>Unsplash Photography</h4>
+                <p>Delivers high-definition travel imagery for Europe, Dubai, United States, and Egypt in cards and chat previews.</p>
+                <a href="https://unsplash.com/privacy" target="_blank" rel="noopener noreferrer" class="eco-link">Unsplash Privacy Policy <i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+
+            <div class="ecosystem-card">
+              <div class="eco-icon"><i class="fas fa-font"></i></div>
+              <div class="eco-info">
+                <h4>Google Fonts</h4>
+                <p>Serves luxury web typography (Cormorant Garamond and Inter) via Google's high-speed global CDN.</p>
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="eco-link">Fonts Privacy Policy <i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+
+            <div class="ecosystem-card">
+              <div class="eco-icon"><i class="fab fa-font-awesome"></i></div>
+              <div class="eco-info">
+                <h4>Font Awesome CDN</h4>
+                <p>Vector interface iconography loaded via Cloudflare CDN for fast, responsive iconography.</p>
+                <a href="https://fontawesome.com/privacy" target="_blank" rel="noopener noreferrer" class="eco-link">Font Awesome Policy <i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Section 7: Cookies & Local Storage -->
+        <article id="cookies" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-cookie-bite"></i></div>
+            <h2>7. Cookies &amp; Local Browser Storage</h2>
+          </div>
+          <p>
+            VoyageAI adopts a minimalist, privacy-first cookie policy. We do not employ third-party advertising cookies, cross-site trackers, or behavioral profiling pixels.
+          </p>
+          <ul class="privacy-checklist">
+            <li><i class="fas fa-check"></i> <strong>`voyageai_theme`:</strong> Stored in `localStorage` to preserve your Dark or Light mode preference across visits without flickering.</li>
+            <li><i class="fas fa-check"></i> <strong>`voyageai_gemini_key`:</strong> Stored optionally in `localStorage` only if you choose to persist your personal Google AI Studio API key.</li>
+            <li><i class="fas fa-check"></i> <strong>Full Browser Control:</strong> You may inspect, clear, or block all stored keys via your browser settings at any time without impacting basic browsing.</li>
+          </ul>
+        </article>
+
+        <!-- Section 8: Your Rights (GDPR / CCPA) -->
+        <article id="your-rights" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-user-check"></i></div>
+            <h2>8. Your Rights (GDPR, UK-GDPR &amp; CCPA/CPRA)</h2>
+          </div>
+          <p>
+            Regardless of your geographic location, VoyageAI affords you full autonomy over your data under the European General Data Protection Regulation (GDPR) and California Consumer Privacy Act (CCPA):
+          </p>
+
+          <div class="user-rights-grid">
+            <div class="right-card">
+              <div class="right-icon"><i class="fas fa-eye"></i></div>
+              <h4>Right to Access</h4>
+              <p>Request copies of any personal records or inquiries associated with your contact profile.</p>
+            </div>
+            <div class="right-card">
+              <div class="right-icon"><i class="fas fa-edit"></i></div>
+              <h4>Right to Rectify</h4>
+              <p>Request immediate correction of inaccurate, outdated, or incomplete records.</p>
+            </div>
+            <div class="right-card">
+              <div class="right-icon"><i class="fas fa-trash-alt"></i></div>
+              <h4>Right to Erasure</h4>
+              <p>Request permanent deletion of your data under the "Right to be Forgotten".</p>
+            </div>
+            <div class="right-card">
+              <div class="right-icon"><i class="fas fa-ban"></i></div>
+              <h4>Right to Restrict</h4>
+              <p>Limit or object to specific automated processing or analytics profiling.</p>
+            </div>
+            <div class="right-card">
+              <div class="right-icon"><i class="fas fa-file-export"></i></div>
+              <h4>Data Portability</h4>
+              <p>Receive your information in a standard, machine-readable JSON/CSV export format.</p>
+            </div>
+            <div class="right-card">
+              <div class="right-icon"><i class="fas fa-hand-paper"></i></div>
+              <h4>Non-Discrimination</h4>
+              <p>Exercise your privacy rights freely without facing degradation in service quality.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Section 9: Children & International Transfers -->
+        <article id="children" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-globe"></i></div>
+            <h2>9. Children's Privacy &amp; Cross-Border Data Transfers</h2>
+          </div>
+          <p>
+            <strong>Protection of Minors:</strong> VoyageAI is designed for adults and families planning travel. We do not intentionally collect data from individuals under 16 years of age. If you believe a minor has shared personal credentials, please notify us for immediate purge.
+          </p>
+          <p>
+            <strong>Cross-Border Transfers:</strong> To compute real-time flight rates and execute Google Gemini 3.8 Flash generation, data may be processed on secure servers located in the European Union and the United States under Standard Contractual Clauses (SCCs).
+          </p>
+        </article>
+
+        <!-- Section 10: Terms of Service & Legal Disclaimer -->
+        <article id="terms-of-service" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-gavel"></i></div>
+            <h2>10. Terms of Service &amp; Comprehensive Travel Disclaimer</h2>
+          </div>
+
+          <div class="terms-item-block">
+            <h3>10.1 Nature of AI Travel Advisory</h3>
+            <p>
+              VoyageAI is an intelligent travel consulting and discovery assistant. We are <strong>not</strong> a direct airline ticketing broker, licensed charter carrier, or lodging merchant. Our itineraries, flight deals, hotel selections, and pricing forecasts are generated via artificial intelligence algorithms for planning and entertainment purposes.
+            </p>
+          </div>
+
+          <div class="terms-item-block">
+            <h3>10.2 Pricing &amp; Schedule Volatility</h3>
+            <div class="privacy-callout warning">
+              <div class="privacy-callout-icon"><i class="fas fa-exclamation-triangle"></i></div>
+              <div class="privacy-callout-text">
+                <p><strong>Mandatory Booking Verification:</strong> Airline fares, hotel room availability, visa policies, museum opening hours, and restaurant prices fluctuate constantly. You must verify and confirm all final details with official airlines, hotels, or booking operators before completing monetary transactions.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="terms-item-block">
+            <h3>10.3 Limitation of Liability</h3>
+            <p>
+              In no event shall VoyageAI, its web developer <strong>Youssef Abady</strong>, or its partners be held liable for missed flights, itinerary disruptions, rate changes, currency fluctuations, weather events, or travel cancellations resulting from reliance upon AI-generated advice.
+            </p>
+          </div>
+
+          <div class="terms-item-block">
+            <h3>10.4 Intellectual Property</h3>
+            <p>
+              All branding, responsive software code, user interface designs, and algorithms across VoyageAI are the exclusive intellectual property of <strong>Youssef Abady</strong> and VoyageAI. Unauthorized reproduction or scraping is prohibited.
+            </p>
+          </div>
+        </article>
+
+        <!-- Section 11: Legal & Developer Contact -->
+        <article id="contact-us" class="privacy-card-section privacy-section">
+          <div class="privacy-card-header">
+            <div class="section-icon-badge"><i class="fas fa-headset"></i></div>
+            <h2>11. Legal Inquiries &amp; Developer Contact</h2>
+          </div>
+          <p>
+            For privacy inquiries, GDPR data requests, or architectural consultations regarding VoyageAI, please reach out directly:
+          </p>
+
+          <div class="privacy-contacts-grid">
+            <div class="contact-method-card">
+              <i class="fas fa-envelope"></i>
+              <h4>Email Inquiries</h4>
+              <a href="mailto:youssefabady6@gmail.com">youssefabady6@gmail.com</a>
+            </div>
+            <div class="contact-method-card">
+              <i class="fas fa-phone-alt"></i>
+              <h4>Direct Telephone</h4>
+              <a href="tel:+201270383409">+20 1270383409</a>
+            </div>
+            <div class="contact-method-card">
+              <i class="fab fa-linkedin-in"></i>
+              <h4>Developer LinkedIn</h4>
+              <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer">Youssef Abady Profile</a>
+            </div>
+          </div>
+        </article>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== UNIVERSAL FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><span class="logo-icon">✈</span> Voyage<span>AI</span></h3>
+          <p>Your intelligent travel concierge. Powered by Google Gemini 3.8 Flash, designed for discerning explorers worldwide.</p>
+          <div class="footer-social">
+            <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:youssefabady6@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <a href="tel:+201270383409" aria-label="Phone"><i class="fas fa-phone"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="chat.html">Plan My Trip</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Destinations</h4>
+          <ul>
+            <li><a href="chat.html?plan=europe">Europe</a></li>
+            <li><a href="chat.html?plan=dubai">Dubai</a></li>
+            <li><a href="chat.html?plan=us">United States</a></li>
+            <li><a href="chat.html?plan=egypt">Egypt</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Developer</h4>
+          <div class="footer-contact-item">
+            <span class="icon"><i class="fas fa-user-check"></i></span>
+            <span>Youssef Abady (Web Developer)</span>
+          </div>
+          <div class="footer-contact-item">
+            <span class="icon"><i class="fas fa-envelope"></i></span>
+            <a href="mailto:youssefabady6@gmail.com" style="color: inherit;">youssefabady6@gmail.com</a>
+          </div>
+          <div class="footer-contact-item">
+            <span class="icon"><i class="fas fa-phone"></i></span>
+            <a href="tel:+201270383409" style="color: inherit;">+20 1270383409</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Developer Featured Bar -->
+      <div class="footer-dev-credit">
+        <div class="footer-dev-info">
+          <div class="footer-dev-avatar">YA</div>
+          <div class="footer-dev-text">
+            <h5>Engineered &amp; Developed by Youssef Abady</h5>
+            <p>Lead Web Developer &amp; AI Solutions Engineer</p>
+          </div>
+        </div>
+        <div class="footer-dev-links">
+          <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-linkedin"></i> linkedin.com/in/youssef-abady-8854ys
+          </a>
+          <a href="tel:+201270383409">
+            <i class="fas fa-phone"></i> +20 1270383409
+          </a>
+          <a href="mailto:youssefabady6@gmail.com">
+            <i class="fas fa-envelope"></i> youssefabady6@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 VoyageAI. All rights reserved. Crafted by <strong>Youssef Abady</strong>.</p>
+        <div class="footer-bottom-links">
+          <a href="privacy.html#introduction">Privacy Policy</a>
+          <a href="privacy.html#terms-of-service">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main Script -->
+  <script src="js/main.js"></script>
+</body>
+</html>

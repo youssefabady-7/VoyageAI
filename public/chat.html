@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Plan your dream trip with VoyageAI's intelligent travel assistant. Get personalized itineraries, real-time prices, flights, activities, and dining recommendations.">
+  <meta name="keywords" content="AI travel planner, trip planning, travel agent, luxury travel, VoyageAI, Gemini AI">
+  <title>Plan My Trip — VoyageAI Luxury Travel Agent</title>
+
+  <!-- Anti-flicker Dark Mode Init -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('voyageai_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="chat-body">
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">✈</span>
+        <span class="logo-text">Voyage<span class="text-gold">AI</span></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="destinations.html" class="nav-link">Destinations</a>
+        <a href="chat.html" class="nav-link active">Plan My Trip</a>
+        <a href="privacy.html" class="nav-link">Privacy Policy</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="navThemeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== CHAT STATUS BAR ===== -->
+  <div class="chat-status-bar">
+    <div class="status-left">
+      <span class="status-indicator online"></span>
+      <span class="status-text">VoyageAI Agent</span>
+      <span class="model-badge"><i class="fas fa-bolt"></i> Gemini 3.8 Flash Grounded</span>
+    </div>
+    <div class="status-actions">
+      <button class="theme-toggle mini-theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="status-btn" id="apiKeyBtn" title="Set Gemini API Key">
+        <i class="fas fa-key"></i> <span class="hide-mobile">API Key</span>
+      </button>
+      <button class="status-btn" id="newChatHeaderBtn" title="Start a New Trip Plan">
+        <i class="fas fa-plus-circle"></i> <span class="hide-mobile">New Trip</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== CHAT PAGE WRAPPER ===== -->
+  <main class="chat-page">
+    
+    <!-- Welcome Screen (shown initially, hidden after first message) -->
+    <div class="chat-welcome" id="chatWelcome">
+      <div class="welcome-content">
+        <div class="welcome-icon">
+          <i class="fas fa-compass"></i>
+        </div>
+        <span class="welcome-badge">YOUR PERSONAL TRAVEL DESIGNER</span>
+        <h1>Welcome to Voyage<span class="text-gold">AI</span></h1>
+        <p class="welcome-subtitle">
+          Whether you're traveling solo, as a couple on a romantic honeymoon, or with family — tell me your wishes and budget. I will craft a day-by-day itinerary with live 2026 prices, flight deals, handpicked hotels, activities, and dining gems with photos!
+        </p>
+
+        <div class="quick-starts">
+          <span class="quick-start-title">Select a Curated Journey to Begin:</span>
+          <div class="quick-start-grid">
+            <button class="quick-start-btn" data-message="Hello! I want to plan a romantic couple's trip to Europe. What do you recommend?">
+              <div class="qs-icon"><i class="fas fa-heart"></i></div>
+              <div class="qs-text">
+                <strong>Romantic Europe Honeymoon</strong>
+                <small>Paris, Venice &amp; Rome for couples</small>
+              </div>
+            </button>
+            <button class="quick-start-btn" data-message="Hi VoyageAI, I want to organize a luxury family vacation to Dubai with my kids.">
+              <div class="qs-icon"><i class="fas fa-users"></i></div>
+              <div class="qs-text">
+                <strong>Family Luxury in Dubai</strong>
+                <small>Desert safaris, Burj Khalifa &amp; fun</small>
+              </div>
+            </button>
+            <button class="quick-start-btn" data-message="I'm planning a trip to Egypt to explore the Pyramids and ancient culture. Help me plan!">
+              <div class="qs-icon"><i class="fas fa-landmark"></i></div>
+              <div class="qs-text">
+                <strong>Ancient Wonders of Egypt</strong>
+                <small>Pyramids, Nile Cruise &amp; Luxor</small>
+              </div>
+            </button>
+            <button class="quick-start-btn" data-message="I want to plan an exciting adventure road-trip across the United States.">
+              <div class="qs-icon"><i class="fas fa-road"></i></div>
+              <div class="qs-text">
+                <strong>United States Coast-to-Coast</strong>
+                <small>NYC, National Parks &amp; California</small>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Chat Messages Container -->
+    <div class="chat-container" id="chatContainer" style="display:none;">
+      <div class="chat-messages" id="chatMessages">
+        <!-- Messages injected dynamically by chat.js -->
+      </div>
+    </div>
+
+    <!-- Input Area (Fixed at bottom) -->
+    <div class="chat-input-area">
+      <div class="chat-input-container">
+        <button class="new-chat-btn" id="newChatBtn" title="Reset and start a new conversation">
+          <i class="fas fa-redo-alt"></i>
+        </button>
+        <textarea 
+          id="chatInput" 
+          placeholder="Ask me anything: 'Plan a 7-day trip to Paris for $3000' or 'Best flight to Dubai from London'..." 
+          rows="1"
+          maxlength="2000"
+        ></textarea>
+        <button class="send-btn" id="sendBtn" title="Send your message">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+      <p class="chat-disclaimer">
+        <i class="fas fa-shield-alt"></i> VoyageAI computes live 2026 pricing and real-world flight comparisons. Prices are approximate. | Engineered by <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer" style="color: #C9A96E; font-weight: 600; text-decoration: underline;">Youssef Abady</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- ===== ADVANCED API KEY SETTINGS MODAL ===== -->
+  <div class="modal-overlay" id="apiKeyModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fas fa-key text-gold"></i> Gemini API Key Connection</h3>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Connect your <strong>Google Gemini 3.8 Flash</strong> API key for real-time web search grounding and live 2026 flight &amp; hotel prices.
+        </p>
+        
+        <div class="modal-status-msg" id="modalStatusMsg"></div>
+
+        <label for="apiKeyInput" class="input-label">Gemini API Key</label>
+        <div class="input-group">
+          <input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off">
+          <button type="button" class="btn-toggle-eye" id="toggleKeyVisibility" title="Show/Hide Key">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="modal-checkbox-row">
+          <label>
+            <input type="checkbox" id="persistEnvCheckbox" checked>
+            <span>Save key to server <code>.env</code> file (permanent)</span>
+          </label>
+        </div>
+
+        <div class="modal-hints">
+          <p><i class="fas fa-info-circle"></i> Don't have a Gemini API key? Get one in seconds for free at <a href="https://aistudio.google.com/" target="_blank" rel="noopener">Google AI Studio <i class="fas fa-external-link-alt"></i></a>.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-outline" id="clearKeyBtn">Clear Key</button>
+        <button class="btn btn-sm btn-outline-white" id="testKeyBtn"><i class="fas fa-vial"></i> Test Key</button>
+        <button class="btn btn-sm btn-gold" id="saveKeyBtn"><i class="fas fa-check"></i> Save &amp; Connect</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+  
+  <!-- Site Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

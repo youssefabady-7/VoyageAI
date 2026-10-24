@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore handpicked luxury destinations with VoyageAI — from Europe's romance to Egypt's ancient wonders.">
+  <title>Destinations — VoyageAI</title>
+
+  <!-- Anti-flicker Dark Mode Init -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('voyageai_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* ===== Destinations Page Hero ===== */
+    .destinations-hero {
+      position: relative;
+      height: 50vh;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&q=80') center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .destinations-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(10, 10, 30, 0.72) 0%, rgba(20, 20, 50, 0.58) 100%);
+      z-index: 1;
+    }
+
+    .destinations-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 750px;
+      padding: 0 2rem;
+    }
+
+    .destinations-hero-content h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+    }
+
+    .destinations-hero-content p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ===== Destination Showcase Sections ===== */
+    .destination-showcase {
+      padding: 5rem 2rem;
+      overflow: hidden;
+    }
+
+    .destination-showcase:nth-child(odd) {
+      background: #fff;
+    }
+
+    .destination-showcase:nth-child(even) {
+      background: #faf8f5;
+    }
+
+    .destination-showcase .showcase-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    .destination-showcase:nth-child(even) .showcase-inner {
+      flex-direction: row-reverse;
+    }
+
+    .showcase-images {
+      flex: 1;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .showcase-images img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      object-fit: cover;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .showcase-images img:first-child {
+      height: 320px;
+      grid-row: 1 / 3;
+      grid-column: 1 / 2;
+    }
+
+    .showcase-images img:last-child {
+      height: 152px;
+      align-self: end;
+      grid-row: 2 / 3;
+      grid-column: 2 / 3;
+    }
+
+    .showcase-images img:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+    }
+
+    .showcase-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .showcase-flag {
+      font-size: 2.4rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .showcase-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .showcase-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      color: #c8a55a;
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+      font-style: italic;
+    }
+
+    .showcase-description {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .showcase-highlights {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.5rem;
+    }
+
+    .showcase-highlights li {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: #444;
+      padding: 0.45rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      line-height: 1.5;
+    }
+
+    .showcase-highlights li .highlight-icon {
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .showcase-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.8rem;
+      padding: 1rem 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .showcase-meta-item {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: #777;
+    }
+
+    .showcase-meta-item strong {
+      color: #1a1a2e;
+      font-weight: 600;
+    }
+
+    .btn-plan {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, #c8a55a, #e8c976);
+      color: #1a1a2e;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(200, 165, 90, 0.3);
+      letter-spacing: 0.3px;
+    }
+
+    .btn-plan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(200, 165, 90, 0.45);
+      background: linear-gradient(135deg, #d4b366, #f0d480);
+    }
+
+    /* ===== Comparison Table ===== */
+    .comparison-section {
+      padding: 5rem 2rem;
+      background: #1a1a2e;
+    }
+
+    .comparison-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 600;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .comparison-table-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow-x: auto;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Inter', sans-serif;
+      min-width: 620px;
+    }
+
+    .comparison-table thead {
+      background: linear-gradient(135deg, #c8a55a, #e8c976);
+    }
+
+    .comparison-table thead th {
+      padding: 1.1rem 1.3rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .comparison-table thead th:first-child {
+      text-align: left;
+      border-radius: 16px 0 0 0;
+    }
+
+    .comparison-table thead th:last-child {
+      border-radius: 0 16px 0 0;
+    }
+
+    .comparison-table tbody tr {
+      background: #fff;
+      transition: background 0.2s ease;
+    }
+
+    .comparison-table tbody tr:nth-child(even) {
+      background: #f9f7f3;
+    }
+
+    .comparison-table tbody tr:hover {
+      background: #f0ece3;
+    }
+
+    .comparison-table tbody td {
+      padding: 1rem 1.3rem;
+      font-size: 0.9rem;
+      color: #444;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .comparison-table tbody td:first-child {
+      text-align: left;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    .comparison-table tbody tr:last-child td:first-child {
+      border-radius: 0 0 0 16px;
+    }
+
+    .comparison-table tbody tr:last-child td:last-child {
+      border-radius: 0 0 16px 0;
+    }
+
+    /* ===== CTA Section ===== */
+    .destinations-cta {
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, #faf8f5 0%, #f0ece3 100%);
+      text-align: center;
+    }
+
+    .destinations-cta h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 1rem;
+    }
+
+    .destinations-cta p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .btn-cta-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, #c8a55a, #e8c976);
+      color: #1a1a2e;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(200, 165, 90, 0.35);
+      letter-spacing: 0.3px;
+    }
+
+    .btn-cta-gold:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(200, 165, 90, 0.5);
+      background: linear-gradient(135deg, #d4b366, #f0d480);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 900px) {
+      .destination-showcase {
+        padding: 3.5rem 1.5rem;
+      }
+
+      .destination-showcase .showcase-inner,
+      .destination-showcase:nth-child(even) .showcase-inner {
+        flex-direction: column;
+        gap: 2.5rem;
+      }
+
+      .showcase-images img:first-child {
+        height: 240px;
+      }
+
+      .showcase-images img:last-child {
+        height: 120px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .destinations-hero {
+        height: 40vh;
+        min-height: 300px;
+      }
+
+      .destination-showcase {
+        padding: 2.5rem 1rem;
+      }
+
+      .showcase-images {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-images img:first-child {
+        height: 220px;
+        grid-row: auto;
+        grid-column: auto;
+      }
+
+      .showcase-images img:last-child {
+        height: 160px;
+        grid-row: auto;
+        grid-column: auto;
+      }
+
+      .showcase-meta {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      .comparison-section {
+        padding: 3rem 1rem;
+      }
+
+      .destinations-cta {
+        padding: 3rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Gold Scroll Progress Bar -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">✈</span>
+        <span class="logo-text">Voyage<span class="text-gold">AI</span></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="destinations.html" class="nav-link active">Destinations</a>
+        <a href="chat.html" class="nav-link">Plan My Trip</a>
+        <a href="privacy.html" class="nav-link">Privacy Policy</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="navThemeToggle" aria-label="Toggle dark mode" title="Switch between dark and light mode">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="destinations-hero">
+    <canvas id="heroParticles" class="hero-canvas"></canvas>
+    <div class="destinations-hero-content">
+      <h1>Explore Our Destinations</h1>
+      <p>From ancient wonders to modern marvels — find your perfect escape</p>
+    </div>
+  </section>
+
+  <!-- ===== DESTINATION 1 — EUROPE ===== -->
+  <section class="destination-showcase">
+    <div class="showcase-inner">
+      <div class="showcase-images">
+        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80" alt="Paris, France — Eiffel Tower and romantic streets" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80" alt="Venice, Italy — historic canals and gondolas" loading="lazy">
+      </div>
+      <div class="showcase-text">
+        <span class="showcase-flag">🇪🇺</span>
+        <h2>Europe</h2>
+        <p class="showcase-tagline">If you are searching for exploring and comfort, Europe will be the best</p>
+        <p class="showcase-description">From the romantic streets of Paris to the historic canals of Venice, Europe offers a tapestry of cultures, cuisines, and centuries-old architecture. Whether you're sipping espresso in Rome or wandering through Barcelona's vibrant streets, every corner tells an unforgettable story.</p>
+        <ul class="showcase-highlights">
+          <li><span class="highlight-icon">🏛️</span> World-class museums, castles, and historic landmarks</li>
+          <li><span class="highlight-icon">🍷</span> Michelin-star dining and authentic local culinary traditions</li>
+          <li><span class="highlight-icon">🏔️</span> Breathtaking landscapes from the Swiss Alps to Mediterranean coasts</li>
+          <li><span class="highlight-icon">🎭</span> Rich arts, classical music, and cultural festivals</li>
+        </ul>
+        <div class="showcase-meta">
+          <span class="showcase-meta-item"><strong>Best for:</strong> Couples, culture lovers, food enthusiasts</span>
+          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $1,200/person</span>
+        </div>
+        <a href="chat.html?plan=europe" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan Europe with AI</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTINATION 2 — DUBAI ===== -->
+  <section class="destination-showcase">
+    <div class="showcase-inner">
+      <div class="showcase-images">
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80" alt="Dubai skyline at sunset with Burj Khalifa" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800&q=80" alt="Dubai modern architecture and luxury" loading="lazy">
+      </div>
+      <div class="showcase-text">
+        <span class="showcase-flag">🇦🇪</span>
+        <h2>Dubai</h2>
+        <p class="showcase-tagline">If you are seeking futuristic luxury and unmatched opulence, Dubai redefines travel</p>
+        <p class="showcase-description">Dubai is where the impossible becomes reality. From the world's tallest building to pristine man-made islands, this city of gold offers unmatched luxury, thrilling desert adventures, and shopping like nowhere else on Earth. Ride camels at sunset, then dine at sky-high Michelin-starred restaurants.</p>
+        <ul class="showcase-highlights">
+          <li><span class="highlight-icon">🏗️</span> Iconic landmarks: Burj Khalifa, Palm Jumeirah, Dubai Frame</li>
+          <li><span class="highlight-icon">🛍️</span> World-class shopping at Dubai Mall and traditional Gold Souk</li>
+          <li><span class="highlight-icon">🏜️</span> Thrilling desert safaris with luxury Bedouin camping</li>
+          <li><span class="highlight-icon">🌊</span> Pristine Arabian Gulf beaches and yacht cruises</li>
+        </ul>
+        <div class="showcase-meta">
+          <span class="showcase-meta-item"><strong>Best for:</strong> Luxury seekers, couples, families</span>
+          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $1,500/person</span>
+        </div>
+        <a href="chat.html?plan=dubai" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan Dubai with AI</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTINATION 3 — UNITED STATES ===== -->
+  <section class="destination-showcase">
+    <div class="showcase-inner">
+      <div class="showcase-images">
+        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80" alt="New York City skyline and Times Square" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&q=80" alt="Golden Gate Bridge, San Francisco, California" loading="lazy">
+      </div>
+      <div class="showcase-text">
+        <span class="showcase-flag">🇺🇸</span>
+        <h2>United States</h2>
+        <p class="showcase-tagline">If you crave endless road-trip adventures and iconic metropolises, visit the US</p>
+        <p class="showcase-description">From the neon skyline of New York City to California's sun-drenched coastlines, the United States is a continent of diverse experiences. Explore world-famous national parks, vibrant culinary capitals, and a mosaic of cultures that offers something thrilling for every traveler.</p>
+        <ul class="showcase-highlights">
+          <li><span class="highlight-icon">🗽</span> Iconic cities: NYC, Los Angeles, Miami, Las Vegas, San Francisco</li>
+          <li><span class="highlight-icon">🏞️</span> Breathtaking national parks: Grand Canyon, Yellowstone, Yosemite</li>
+          <li><span class="highlight-icon">🎢</span> Legendary entertainment, Broadway shows, and theme parks</li>
+          <li><span class="highlight-icon">🍔</span> Incredible global food scene from coast to coast</li>
+        </ul>
+        <div class="showcase-meta">
+          <span class="showcase-meta-item"><strong>Best for:</strong> Families, road-trippers, adventure lovers</span>
+          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $1,000/person</span>
+        </div>
+        <a href="chat.html?plan=us" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan USA with AI</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTINATION 4 — EGYPT ===== -->
+  <section class="destination-showcase">
+    <div class="showcase-inner">
+      <div class="showcase-images">
+        <img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=800&q=80" alt="Pyramids of Giza in golden sunset, Egypt" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&q=80" alt="Nile River cruise and ancient temples in Luxor" loading="lazy">
+      </div>
+      <div class="showcase-text">
+        <span class="showcase-flag">🇪🇬</span>
+        <h2>Egypt</h2>
+        <p class="showcase-tagline">If you want to go through the old culture, visit Egypt</p>
+        <p class="showcase-description">Step into a living museum where 5,000 years of civilization come alive. From the majestic Pyramids of Giza to the tranquil waters of a luxury Nile cruise, Egypt offers an unparalleled journey through time. Explore ancient pharaonic temples, dive the crystal Red Sea, and experience vibrant Cairo.</p>
+        <ul class="showcase-highlights">
+          <li><span class="highlight-icon">🏛️</span> Pyramids of Giza, Sphinx, Luxor &amp; Valley of the Kings</li>
+          <li><span class="highlight-icon">🚢</span> Luxurious 5-star Nile River cruise between Luxor &amp; Aswan</li>
+          <li><span class="highlight-icon">🤿</span> World-class coral diving in the Red Sea (Sharm El Sheikh &amp; Hurghada)</li>
+          <li><span class="highlight-icon">🕌</span> Rich Islamic, Coptic, and bazaar heritage in historic Cairo</li>
+        </ul>
+        <div class="showcase-meta">
+          <span class="showcase-meta-item"><strong>Best for:</strong> History buffs, couples, culture seekers</span>
+          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $800/person</span>
+        </div>
+        <a href="chat.html?plan=egypt" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan Egypt with AI</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMPARISON TABLE ===== -->
+  <section class="comparison-section">
+    <h2>Compare Destinations at a Glance</h2>
+    <div class="comparison-table-wrapper">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Europe</th>
+            <th>Dubai</th>
+            <th>USA</th>
+            <th>Egypt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Best Season</td>
+            <td>Spring / Fall</td>
+            <td>Oct – Apr</td>
+            <td>Year-round</td>
+            <td>Oct – Apr</td>
+          </tr>
+          <tr>
+            <td>Avg. Budget / Day</td>
+            <td>$150 – 300</td>
+            <td>$200 – 400</td>
+            <td>$100 – 250</td>
+            <td>$50 – 150</td>
+          </tr>
+          <tr>
+            <td>Visa</td>
+            <td>Schengen</td>
+            <td>On Arrival</td>
+            <td>ESTA / Visa</td>
+            <td>On Arrival</td>
+          </tr>
+          <tr>
+            <td>Language</td>
+            <td>Varies</td>
+            <td>Arabic / English</td>
+            <td>English</td>
+            <td>Arabic / English</td>
+          </tr>
+          <tr>
+            <td>Best For</td>
+            <td>Culture &amp; Romance</td>
+            <td>Luxury &amp; Adventure</td>
+            <td>Diversity</td>
+            <td>History &amp; Budget</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="destinations-cta">
+    <h2>Can't Decide? Let Our AI Help!</h2>
+    <p>Tell our AI travel agent your preferences, and we'll recommend the perfect destination for you.</p>
+    <a href="chat.html" class="btn-cta-gold"><i class="fa-solid fa-comments"></i> Chat With VoyageAI</a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <span class="logo-icon">✈</span>
+            <span class="logo-text">Voyage<span class="text-gold">AI</span></span>
+          </a>
+          <p class="footer-description">Your intelligent travel companion. Tailor-made journeys powered by state-of-the-art AI, built for explorers.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-links-group">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="chat.html">Plan My Trip</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Top Destinations</h4>
+          <ul>
+            <li><a href="chat.html?plan=europe">Europe</a></li>
+            <li><a href="chat.html?plan=dubai">Dubai</a></li>
+            <li><a href="chat.html?plan=us">United States</a></li>
+            <li><a href="chat.html?plan=egypt">Egypt</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Developer</h4>
+          <ul>
+            <li><i class="fa-solid fa-code text-gold"></i> Youssef Abady</li>
+            <li><a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+            <li><a href="tel:+201270383409"><i class="fa-solid fa-phone"></i> +20 1270383409</a></li>
+            <li><a href="mailto:youssefabady6@gmail.com"><i class="fa-solid fa-envelope"></i> youssefabady6@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Developer Featured Bar -->
+      <div class="footer-dev-credit">
+        <div class="footer-dev-info">
+          <div class="footer-dev-avatar">YA</div>
+          <div class="footer-dev-text">
+            <h5>Engineered &amp; Developed by Youssef Abady</h5>
+            <p>Lead Web Developer &amp; AI Solutions Engineer</p>
+          </div>
+        </div>
+        <div class="footer-dev-links">
+          <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-linkedin"></i> linkedin.com/in/youssef-abady-8854ys
+          </a>
+          <a href="tel:+201270383409">
+            <i class="fas fa-phone"></i> +20 1270383409
+          </a>
+          <a href="mailto:youssefabady6@gmail.com">
+            <i class="fas fa-envelope"></i> youssefabady6@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 VoyageAI. All rights reserved. Crafted by <strong>Youssef Abady</strong>. | <a href="privacy.html" style="color: rgba(255,255,255,0.7); text-decoration: underline;">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
