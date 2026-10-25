@@ -1,0 +1,18 @@
+# VoyageAI Robots.txt
+# https://voyageai-travel.vercel.app/
+
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /destinations.html
+Allow: /chat.html
+Allow: /privacy.html
+Allow: /css/
+Allow: /js/
+
+# Disallow sensitive internal API routes from crawlers
+Disallow: /api/
+
+# Host & Sitemap
+Host: https://voyageai-travel.vercel.app
+Sitemap: https://voyageai-travel.vercel.app/sitemap.xml

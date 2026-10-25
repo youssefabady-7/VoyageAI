@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Page not found — VoyageAI">
+  <meta name="robots" content="noindex, follow">
+  <meta name="author" content="Youssef Abady">
+  <title>404 — Page Not Found | VoyageAI</title>
+
+  <!-- Anti-flicker Dark Mode Init -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('voyageai_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, #070F1E 0%, #0B1D3A 100%);
+      padding: 40px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .error-page::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201, 169, 110, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .error-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .error-code {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(6rem, 15vw, 12rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #C9A96E, #E8D5A8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .error-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: #FFFFFF;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .error-description {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .error-actions .btn {
+      padding: 14px 32px;
+      font-size: 0.95rem;
+    }
+
+    .error-icon {
+      font-size: 3rem;
+      color: #C9A96E;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-page">
+    <div class="error-content">
+      <div class="error-icon">
+        <i class="fas fa-compass"></i>
+      </div>
+      <div class="error-code">404</div>
+      <h1 class="error-title">Lost in Transit</h1>
+      <p class="error-description">
+        The destination you're looking for doesn't exist on our map. But don't worry — your dream trip is just a click away.
+      </p>
+      <div class="error-actions">
+        <a href="index.html" class="btn btn-gold btn-lg">
+          <i class="fas fa-home"></i> Back to Home
+        </a>
+        <a href="chat.html" class="btn btn-outline btn-lg" style="color: #fff; border-color: rgba(255,255,255,0.4);">
+          <i class="fas fa-comments"></i> Plan a Trip
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

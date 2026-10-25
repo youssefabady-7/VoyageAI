@@ -83,7 +83,10 @@ class VoyageChat {
       this.newChatHeaderBtn.addEventListener('click', () => this.resetChat());
     }
 
-    // Setup API Key Modal
+    // Mobile Virtual Keyboard & Viewport Fixes
+    this.initMobileKeyboardSupport();
+
+    // Setup API Key Modal (optional developer settings)
     this.setupApiKeyModal();
 
     // Check server status & health
@@ -91,6 +94,65 @@ class VoyageChat {
 
     // Check URL parameters for direct planning (e.g. ?plan=europe)
     this.checkUrlParameters();
+  }
+
+  initMobileKeyboardSupport() {
+    const inputArea = document.querySelector('.chat-input-area');
+    const inputContainer = document.querySelector('.chat-input-container');
+
+    // 1. Ensure clicking/tapping anywhere on input container triggers keyboard
+    if (inputContainer && this.chatInput) {
+      inputContainer.addEventListener('click', (e) => {
+        if (e.target !== this.chatInput && !e.target.closest('#sendBtn') && !e.target.closest('#newChatBtn')) {
+          this.chatInput.focus();
+        }
+      });
+      inputContainer.addEventListener('touchend', (e) => {
+        if (e.target !== this.chatInput && !e.target.closest('#sendBtn') && !e.target.closest('#newChatBtn')) {
+          e.preventDefault();
+          this.chatInput.focus();
+        }
+      }, { passive: false });
+    }
+
+    // 2. Visual Viewport handling for Android & iOS soft keyboards (prevents 100vh layout jumps & hidden input)
+    if (window.visualViewport) {
+      const onViewportChange = () => {
+        const vv = window.visualViewport;
+        const windowHeight = window.innerHeight;
+        const keyboardHeight = Math.max(0, windowHeight - (vv.height + vv.offsetTop));
+
+        if (inputArea) {
+          if (keyboardHeight > 40) {
+            inputArea.style.transform = `translateY(-${keyboardHeight}px)`;
+            inputArea.classList.add('keyboard-open');
+          } else {
+            inputArea.style.transform = '';
+            inputArea.classList.remove('keyboard-open');
+          }
+        }
+
+        // Keep messages scrolled smoothly to bottom
+        if (this.chatMessages && this.chatContainer && this.chatContainer.style.display !== 'none') {
+          this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        }
+      };
+
+      window.visualViewport.addEventListener('resize', onViewportChange);
+      window.visualViewport.addEventListener('scroll', onViewportChange);
+    }
+
+    // 3. Smooth scroll on focus
+    if (this.chatInput) {
+      this.chatInput.addEventListener('focus', () => {
+        setTimeout(() => {
+          this.chatInput.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          if (this.chatMessages && this.chatContainer && this.chatContainer.style.display !== 'none') {
+            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+          }
+        }, 260);
+      });
+    }
   }
 
   async syncServerStatus() {
@@ -343,18 +405,14 @@ class VoyageChat {
     if (this.sendBtn) this.sendBtn.disabled = true;
 
     try {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.apiKey) {
-        headers['x-api-key'] = this.apiKey;
-      }
-
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: headers,
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           message: message,
-          history: this.history,
-          apiKey: this.apiKey || undefined
+          history: this.history
         })
       });
 

@@ -3,8 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Explore handpicked luxury destinations with VoyageAI — from Europe's romance to Egypt's ancient wonders.">
-  <title>Destinations — VoyageAI</title>
+  <meta name="description" content="Explore handpicked luxury destinations with VoyageAI — from Europe's romance to Egypt's ancient wonders. Compare flights, stays, and budget estimates.">
+  <meta name="author" content="Youssef Abady">
+  <meta name="robots" content="index, follow">
+  <title>Destinations — VoyageAI Luxury Travel Concierge</title>
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Destinations — VoyageAI Luxury Travel Concierge">
+  <meta property="og:description" content="Explore handpicked luxury destinations with VoyageAI — from Europe's romance to Egypt's ancient wonders.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://voyageai-travel.vercel.app/destinations.html">
+  <meta property="og:site_name" content="VoyageAI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Destinations — VoyageAI Luxury Travel Concierge">
+  <meta name="twitter:description" content="Explore handpicked luxury destinations with VoyageAI — from Europe's romance to Egypt's ancient wonders.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80">
 
   <!-- Anti-flicker Dark Mode Init -->
   <script>
@@ -26,13 +44,14 @@
     /* ===== Destinations Page Hero ===== */
     .destinations-hero {
       position: relative;
-      height: 50vh;
-      min-height: 380px;
+      height: 52vh;
+      min-height: 400px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      background: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&q=80') center/cover no-repeat;
+      background: #0B1D3A url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&q=80') center/cover no-repeat;
       overflow: hidden;
     }
 
@@ -40,38 +59,46 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(10, 10, 30, 0.72) 0%, rgba(20, 20, 50, 0.58) 100%);
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(11, 29, 58, 0.72) 0%, rgba(5, 11, 22, 0.94) 100%),
+        linear-gradient(135deg, rgba(7, 15, 30, 0.9) 0%, rgba(11, 29, 58, 0.6) 100%);
       z-index: 1;
     }
 
     .destinations-hero-content {
       position: relative;
       z-index: 2;
-      max-width: 750px;
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
       padding: 0 2rem;
+      text-align: center;
     }
 
     .destinations-hero-content h1 {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2.4rem, 5vw, 3.8rem);
-      font-weight: 600;
+      font-weight: 700;
       color: #fff;
       margin-bottom: 1rem;
       letter-spacing: 1px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
     }
 
     .destinations-hero-content p {
       font-family: 'Inter', sans-serif;
       font-size: clamp(1rem, 2vw, 1.2rem);
-      color: rgba(255, 255, 255, 0.85);
-      font-weight: 300;
+      color: #F1F5F9;
+      font-weight: 400;
       line-height: 1.7;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
     }
 
     /* ===== Destination Showcase Sections ===== */
     .destination-showcase {
       padding: 5rem 2rem;
       overflow: hidden;
+      transition: background 0.3s ease;
     }
 
     .destination-showcase:nth-child(odd) {
@@ -80,6 +107,14 @@
 
     .destination-showcase:nth-child(even) {
       background: #faf8f5;
+    }
+
+    [data-theme="dark"] .destination-showcase:nth-child(odd) {
+      background: #070F1E;
+    }
+
+    [data-theme="dark"] .destination-showcase:nth-child(even) {
+      background: #0B1D3A;
     }
 
     .destination-showcase .showcase-inner {
@@ -109,6 +144,11 @@
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
       object-fit: cover;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    [data-theme="dark"] .showcase-images img {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .showcase-images img:first-child {
@@ -149,6 +189,10 @@
       letter-spacing: 0.5px;
     }
 
+    [data-theme="dark"] .showcase-text h2 {
+      color: #FFFFFF;
+    }
+
     .showcase-tagline {
       font-family: 'Inter', sans-serif;
       font-size: 1.05rem;
@@ -164,6 +208,10 @@
       color: #555;
       line-height: 1.8;
       margin-bottom: 1.5rem;
+    }
+
+    [data-theme="dark"] .showcase-description {
+      color: #D1D5DB;
     }
 
     .showcase-highlights {
@@ -183,6 +231,10 @@
       line-height: 1.5;
     }
 
+    [data-theme="dark"] .showcase-highlights li {
+      color: #E5E7EB;
+    }
+
     .showcase-highlights li .highlight-icon {
       font-size: 1.15rem;
       flex-shrink: 0;
@@ -190,24 +242,107 @@
     }
 
     .showcase-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.2rem;
+      align-items: center;
       margin-bottom: 1.8rem;
-      padding: 1rem 0;
-      border-top: 1px solid rgba(0, 0, 0, 0.06);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 1.1rem 1.35rem;
+      background: rgba(201, 169, 110, 0.06);
+      border: 1px solid rgba(201, 169, 110, 0.22);
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .showcase-meta:hover {
+      border-color: rgba(201, 169, 110, 0.45);
+      box-shadow: 0 8px 24px rgba(201, 169, 110, 0.12);
+    }
+
+    [data-theme="dark"] .showcase-meta {
+      background: linear-gradient(135deg, rgba(201, 169, 110, 0.08) 0%, rgba(15, 23, 42, 0.5) 100%);
+      border-color: rgba(201, 169, 110, 0.28);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    [data-theme="dark"] .showcase-meta:hover {
+      border-color: rgba(201, 169, 110, 0.55);
+      box-shadow: 0 10px 30px rgba(201, 169, 110, 0.18);
     }
 
     .showcase-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
       font-family: 'Inter', sans-serif;
+      min-width: 0;
+    }
+
+    .showcase-meta-item .meta-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(201, 169, 110, 0.15);
+      color: #8A6827;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    [data-theme="dark"] .showcase-meta-item .meta-icon {
+      background: rgba(201, 169, 110, 0.18);
+      color: #E8D5A8;
+      border: 1px solid rgba(201, 169, 110, 0.25);
+    }
+
+    .showcase-meta-item .meta-content {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .showcase-meta-item .meta-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #8A6827;
+    }
+
+    [data-theme="dark"] .showcase-meta-item .meta-label {
+      color: #C9A96E;
+    }
+
+    .showcase-meta-item .meta-value {
       font-size: 0.88rem;
-      color: #777;
+      font-weight: 500;
+      color: #1F2937;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    [data-theme="dark"] .showcase-meta-item .meta-value {
+      color: #F3F4F6;
     }
 
     .showcase-meta-item strong {
-      color: #1a1a2e;
-      font-weight: 600;
+      color: #8A6827;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.1px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    [data-theme="dark"] .showcase-meta-item strong {
+      color: #C9A96E;
     }
 
     .btn-plan {
@@ -299,6 +434,18 @@
       background: #f0ece3;
     }
 
+    [data-theme="dark"] .comparison-table tbody tr {
+      background: #0E1A2E;
+    }
+
+    [data-theme="dark"] .comparison-table tbody tr:nth-child(even) {
+      background: #081220;
+    }
+
+    [data-theme="dark"] .comparison-table tbody tr:hover {
+      background: #14243C;
+    }
+
     .comparison-table tbody td {
       padding: 1rem 1.3rem;
       font-size: 0.9rem;
@@ -307,10 +454,19 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
 
+    [data-theme="dark"] .comparison-table tbody td {
+      color: #D1D5DB;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
     .comparison-table tbody td:first-child {
       text-align: left;
       font-weight: 600;
       color: #1a1a2e;
+    }
+
+    [data-theme="dark"] .comparison-table tbody td:first-child {
+      color: #FFFFFF;
     }
 
     .comparison-table tbody tr:last-child td:first-child {
@@ -326,6 +482,12 @@
       padding: 5rem 2rem;
       background: linear-gradient(135deg, #faf8f5 0%, #f0ece3 100%);
       text-align: center;
+      transition: background 0.3s ease;
+    }
+
+    [data-theme="dark"] .destinations-cta {
+      background: linear-gradient(135deg, #070F1E 0%, #0B1D3A 100%);
+      border-top: 1px solid rgba(201, 169, 110, 0.2);
     }
 
     .destinations-cta h2 {
@@ -336,6 +498,10 @@
       margin-bottom: 1rem;
     }
 
+    [data-theme="dark"] .destinations-cta h2 {
+      color: #FFFFFF;
+    }
+
     .destinations-cta p {
       font-family: 'Inter', sans-serif;
       font-size: 1.05rem;
@@ -343,6 +509,10 @@
       max-width: 600px;
       margin: 0 auto 2rem;
       line-height: 1.7;
+    }
+
+    [data-theme="dark"] .destinations-cta p {
+      color: #D1D5DB;
     }
 
     .btn-cta-gold {
@@ -416,8 +586,9 @@
       }
 
       .showcase-meta {
-        flex-direction: column;
-        gap: 0.6rem;
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+        padding: 0.95rem 1.1rem;
       }
 
       .comparison-section {
@@ -486,8 +657,20 @@
           <li><span class="highlight-icon">🎭</span> Rich arts, classical music, and cultural festivals</li>
         </ul>
         <div class="showcase-meta">
-          <span class="showcase-meta-item"><strong>Best for:</strong> Couples, culture lovers, food enthusiasts</span>
-          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $1,200/person</span>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-users"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Best for</span>
+              <span class="meta-value">Couples, culture lovers, food enthusiasts</span>
+            </div>
+          </div>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-tag"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Starting from</span>
+              <span class="meta-value">Packages from $1,200/person</span>
+            </div>
+          </div>
         </div>
         <a href="chat.html?plan=europe" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan Europe with AI</a>
       </div>
@@ -513,8 +696,20 @@
           <li><span class="highlight-icon">🌊</span> Pristine Arabian Gulf beaches and yacht cruises</li>
         </ul>
         <div class="showcase-meta">
-          <span class="showcase-meta-item"><strong>Best for:</strong> Luxury seekers, couples, families</span>
-          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $1,500/person</span>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-crown"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Best for</span>
+              <span class="meta-value">Luxury seekers, couples, families</span>
+            </div>
+          </div>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-tag"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Starting from</span>
+              <span class="meta-value">Packages from $1,500/person</span>
+            </div>
+          </div>
         </div>
         <a href="chat.html?plan=dubai" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan Dubai with AI</a>
       </div>
@@ -540,8 +735,20 @@
           <li><span class="highlight-icon">🍔</span> Incredible global food scene from coast to coast</li>
         </ul>
         <div class="showcase-meta">
-          <span class="showcase-meta-item"><strong>Best for:</strong> Families, road-trippers, adventure lovers</span>
-          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $1,000/person</span>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-route"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Best for</span>
+              <span class="meta-value">Families, road-trippers, adventure lovers</span>
+            </div>
+          </div>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-tag"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Starting from</span>
+              <span class="meta-value">Packages from $1,000/person</span>
+            </div>
+          </div>
         </div>
         <a href="chat.html?plan=us" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan USA with AI</a>
       </div>
@@ -567,8 +774,20 @@
           <li><span class="highlight-icon">🕌</span> Rich Islamic, Coptic, and bazaar heritage in historic Cairo</li>
         </ul>
         <div class="showcase-meta">
-          <span class="showcase-meta-item"><strong>Best for:</strong> History buffs, couples, culture seekers</span>
-          <span class="showcase-meta-item"><strong>Starting from:</strong> Packages from $800/person</span>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-landmark"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Best for</span>
+              <span class="meta-value">History buffs, couples, culture seekers</span>
+            </div>
+          </div>
+          <div class="showcase-meta-item">
+            <span class="meta-icon"><i class="fa-solid fa-tag"></i></span>
+            <div class="meta-content">
+              <span class="meta-label">Starting from</span>
+              <span class="meta-value">Packages from $800/person</span>
+            </div>
+          </div>
         </div>
         <a href="chat.html?plan=egypt" class="btn-plan"><i class="fa-solid fa-paper-plane"></i> Plan Egypt with AI</a>
       </div>
@@ -632,30 +851,29 @@
 
   <!-- ===== CTA ===== -->
   <section class="destinations-cta">
-    <h2>Can't Decide? Let Our AI Help!</h2>
-    <p>Tell our AI travel agent your preferences, and we'll recommend the perfect destination for you.</p>
-    <a href="chat.html" class="btn-cta-gold"><i class="fa-solid fa-comments"></i> Chat With VoyageAI</a>
+    <div class="container">
+      <h2>Can't Decide? Let Our AI Help!</h2>
+      <p>Tell our AI travel agent your preferences, and we'll recommend the perfect destination for you.</p>
+      <a href="chat.html" class="btn-cta-gold"><i class="fa-solid fa-comments"></i> Chat With VoyageAI</a>
+    </div>
   </section>
 
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
-    <div class="footer-container">
+    <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="index.html" class="logo">
-            <span class="logo-icon">✈</span>
-            <span class="logo-text">Voyage<span class="text-gold">AI</span></span>
-          </a>
-          <p class="footer-description">Your intelligent travel companion. Tailor-made journeys powered by state-of-the-art AI, built for explorers.</p>
+          <h3><span class="logo-icon">✈</span> Voyage<span>AI</span></h3>
+          <p>Your intelligent travel concierge. Powered by artificial intelligence, designed for discerning explorers worldwide.</p>
           <div class="footer-social">
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://github.com/youssefabady-7" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="mailto:youssefabady6@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <a href="tel:+201270383409" aria-label="Phone"><i class="fas fa-phone"></i></a>
           </div>
         </div>
-        <div class="footer-links-group">
-          <h4>Quick Links</h4>
+        <div class="footer-col">
+          <h4>Navigation</h4>
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="destinations.html">Destinations</a></li>
@@ -663,8 +881,8 @@
             <li><a href="privacy.html">Privacy Policy</a></li>
           </ul>
         </div>
-        <div class="footer-links-group">
-          <h4>Top Destinations</h4>
+        <div class="footer-col">
+          <h4>Destinations</h4>
           <ul>
             <li><a href="chat.html?plan=europe">Europe</a></li>
             <li><a href="chat.html?plan=dubai">Dubai</a></li>
@@ -672,14 +890,24 @@
             <li><a href="chat.html?plan=egypt">Egypt</a></li>
           </ul>
         </div>
-        <div class="footer-links-group">
-          <h4>Developer</h4>
-          <ul>
-            <li><i class="fa-solid fa-code text-gold"></i> Youssef Abady</li>
-            <li><a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
-            <li><a href="tel:+201270383409"><i class="fa-solid fa-phone"></i> +20 1270383409</a></li>
-            <li><a href="mailto:youssefabady6@gmail.com"><i class="fa-solid fa-envelope"></i> youssefabady6@gmail.com</a></li>
-          </ul>
+        <div class="footer-col">
+          <h4>Developer Contact</h4>
+          <div class="footer-contact-item">
+            <span class="icon"><i class="fas fa-user-check"></i></span>
+            <span>Youssef Abady (Web Developer)</span>
+          </div>
+          <div class="footer-contact-item">
+            <span class="icon"><i class="fas fa-envelope"></i></span>
+            <a href="mailto:youssefabady6@gmail.com" style="color: inherit;">youssefabady6@gmail.com</a>
+          </div>
+          <div class="footer-contact-item">
+            <span class="icon"><i class="fas fa-phone"></i></span>
+            <a href="tel:+201270383409" style="color: inherit;">+20 1270383409</a>
+          </div>
+          <div class="footer-contact-item">
+            <span class="icon"><i class="fab fa-github"></i></span>
+            <a href="https://github.com/youssefabady-7" target="_blank" rel="noopener noreferrer" style="color: inherit;">github.com/youssefabady-7</a>
+          </div>
         </div>
       </div>
 
@@ -696,6 +924,9 @@
           <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-linkedin"></i> linkedin.com/in/youssef-abady-8854ys
           </a>
+          <a href="https://github.com/youssefabady-7" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-github"></i> github.com/youssefabady-7
+          </a>
           <a href="tel:+201270383409">
             <i class="fas fa-phone"></i> +20 1270383409
           </a>
@@ -706,7 +937,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 VoyageAI. All rights reserved. Crafted by <strong>Youssef Abady</strong>. | <a href="privacy.html" style="color: rgba(255,255,255,0.7); text-decoration: underline;">Privacy Policy</a></p>
+        <p>&copy; <span class="dynamic-year">2026</span> VoyageAI. All rights reserved. Crafted by <strong>Youssef Abady</strong>. | <a href="privacy.html" style="color: rgba(255,255,255,0.7); text-decoration: underline;">Privacy Policy</a></p>
       </div>
     </div>
   </footer>

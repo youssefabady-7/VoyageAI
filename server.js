@@ -14,6 +14,61 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+// ============================================
+// RATE LIMITING & SECURITY SAFEGUARDS
+// ============================================
+const rateLimitMap = new Map();
+const RATE_WINDOW_MS = 60 * 1000; // 1 minute window
+const CHAT_RATE_LIMIT = 20; // Max 20 chat queries / min per IP
+const API_RATE_LIMIT = 60; // Max 60 general api calls / min per IP
+
+function createRateLimiter(maxRequests, windowMs) {
+  return (req, res, next) => {
+    const rawIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "127.0.0.1";
+    const ip = Array.isArray(rawIp) ? rawIp[0] : rawIp.split(",")[0].trim();
+    const key = `${req.baseUrl || req.path}:${ip}`;
+    const now = Date.now();
+
+    let record = rateLimitMap.get(key);
+    if (!record || now - record.startTime > windowMs) {
+      record = { startTime: now, count: 1 };
+      rateLimitMap.set(key, record);
+    } else {
+      record.count++;
+    }
+
+    const remaining = Math.max(0, maxRequests - record.count);
+    res.setHeader("X-RateLimit-Limit", maxRequests);
+    res.setHeader("X-RateLimit-Remaining", remaining);
+    res.setHeader("X-RateLimit-Reset", Math.ceil((record.startTime + windowMs) / 1000));
+
+    if (record.count > maxRequests) {
+      const retryAfter = Math.ceil((record.startTime + windowMs - now) / 1000);
+      res.setHeader("Retry-After", retryAfter);
+      return res.status(429).json({
+        error: "Rate limit reached. Please wait a moment before sending another message.",
+        code: "RATE_LIMITED",
+        retryAfter
+      });
+    }
+
+    next();
+  };
+}
+
+// Periodic cleanup of expired rate limit entries
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, record] of rateLimitMap.entries()) {
+    if (now - record.startTime > RATE_WINDOW_MS * 2) {
+      rateLimitMap.delete(key);
+    }
+  }
+}, 5 * 60 * 1000);
+
+const chatLimiter = createRateLimiter(CHAT_RATE_LIMIT, RATE_WINDOW_MS);
+const apiLimiter = createRateLimiter(API_RATE_LIMIT, RATE_WINDOW_MS);
+
 // In-memory key store if set via UI
 let inMemoryApiKey = "";
 let detectedWorkingModel = "gemini-3.8-flash";
@@ -104,10 +159,12 @@ async function queryAvailableModels(apiKey) {
   }
 }
 
-const SYSTEM_PROMPT = `You are "VoyageAI" — an elite, world-class AI travel agent designed for discerning travelers. You possess encyclopedic knowledge of global travel, airlines, luxury & boutique hotels, hidden culinary gems, cultural customs, and current 2026 pricing.
+const CURRENT_YEAR = new Date().getFullYear();
+
+const SYSTEM_PROMPT = `You are "VoyageAI" — an elite, world-class AI travel agent designed for discerning travelers. You possess encyclopedic knowledge of global travel, airlines, luxury & boutique hotels, hidden culinary gems, cultural customs, and current ${CURRENT_YEAR} pricing.
 
 DEVELOPER & ARCHITECT CREDITS:
-You were proudly engineered and created by Youssef Abady (Lead Web Developer & AI Engineer). If asked who built you or about the developer, warmly introduce Youssef Abady, his LinkedIn (www.linkedin.com/in/youssef-abady-8854ys), email (youssefabady6@gmail.com), and phone (+20 1270383409).
+You were proudly engineered and created by Youssef Abady (Lead Web Developer & AI Engineer). If asked who built you or about the developer, warmly introduce Youssef Abady, his LinkedIn (https://www.linkedin.com/in/youssef-abady-8854ys), GitHub (https://github.com/youssefabady-7), email (youssefabady6@gmail.com), and phone (+20 1270383409).
 
 YOUR PERSONALITY:
 - Highly professional, warm, attentive, and knowledgeable.
@@ -120,7 +177,7 @@ You must guide the user step-by-step. Do NOT overwhelm them with too many questi
 2. TRAVEL PARTY: Inquire about the travel party: are they traveling solo, as a couple, or with family/friends? How many people in total? Any children or seniors?
 3. OCCASION: Ask if this trip marks a special occasion (honeymoon, anniversary, milestone birthday, graduation, or a rejuvenating escape).
 4. BUDGET & COMFORT LEVEL: Tactfully ask about their anticipated budget range (per person or total trip) and travel style (luxury, premium comfort, or smart value).
-5. DURATION & DATES: Inquire about their planned length of stay (number of days/nights) and target month or travel season in 2026.
+5. DURATION & DATES: Inquire about their planned length of stay (number of days/nights) and target month or travel season in ${CURRENT_YEAR}.
 6. DEPARTURE POINT: Ask for their departure city or home airport so you can find the best flight options and deals.
 7. TRAVEL INTERESTS & PASSIONS: Ask what excites them most (culinary adventures, historical landmarks, relaxation & wellness, outdoor thrill, shopping, nightlife, or art & architecture).
 
@@ -128,7 +185,7 @@ ITINERARY GENERATION (When you have gathered their details):
 Create a breathtaking, personalized itinerary featuring:
 1. ✈️ FLIGHT RECOMMENDATIONS:
    - Specific airline options (e.g., Emirates, Delta, Lufthansa, British Airways, EgyptAir)
-   - Estimated roundtrip prices based on current 2026 rates from their departure city
+   - Estimated roundtrip prices based on current ${CURRENT_YEAR} rates from their departure city
    - Route highlights (direct vs convenient layovers, best loyalty alliances)
 2. 🏨 HANDPICKED ACCOMMODATIONS:
    - 2-3 curated hotel/resort options tailored to their budget style with estimated nightly rates
@@ -185,6 +242,7 @@ function generateFallbackResponse(userMessage, history) {
 VoyageAI was conceptualized, designed, and architected by **Youssef Abady**, a Lead Full-Stack Web Developer & AI Solutions Engineer.
 
 - **LinkedIn:** [linkedin.com/in/youssef-abady-8854ys](https://www.linkedin.com/in/youssef-abady-8854ys)
+- **GitHub:** [github.com/youssefabady-7](https://github.com/youssefabady-7)
 - **Email:** [youssefabady6@gmail.com](mailto:youssefabady6@gmail.com)
 - **Phone / WhatsApp:** [+20 1270383409](tel:+201270383409)
 
@@ -200,7 +258,7 @@ Europe is the pinnacle of exploration and comfort. From Paris bistros to Venetia
 ![Paris](https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80)
 ![Venice](https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80)
 
-#### ✈️ Current 2026 Flight Estimates:
+#### ✈️ Current ${CURRENT_YEAR} Flight Estimates:
 - **Roundtrip Economy:** ~$650 – $950 USD (Air France, Lufthansa, Delta, British Airways)
 - **Roundtrip Premium / Business:** ~$1,800 – $3,200 USD
 
@@ -227,7 +285,7 @@ Dubai delivers unforgettable opulence, world-class entertainment, and thrilling 
 
 #### ✈️ Flight Highlights & Deals:
 - **Emirates Direct Specials:** ~$850 – $1,250 Economy roundtrip
-- **Qatar Airways / Etihad Airways:** Outstanding service with competitive 2026 packages
+- **Qatar Airways / Etihad Airways:** Outstanding service with competitive ${CURRENT_YEAR} packages
 
 #### 🌟 Signature Experiences & Restaurants:
 - **Sunset Desert Safari** in vintage Land Rovers with falconry and private Bedouin starlit dinner (~$140/person)
@@ -362,21 +420,22 @@ function sanitizeHistory(rawHistory) {
   return clean;
 }
 
-// Health check endpoint
-app.get("/api/health", async (req, res) => {
+// Health check endpoint (Rate-limited, zero credential leaks)
+app.get("/api/health", apiLimiter, async (req, res) => {
   const activeKey = getEffectiveApiKey();
   res.json({
     status: "ok",
     service: "VoyageAI Agent",
     model: detectedWorkingModel,
-    hasApiKey: Boolean(activeKey),
+    connected: Boolean(activeKey),
+    rateLimit: `${CHAT_RATE_LIMIT} req/min`,
     developer: "Youssef Abady",
     timestamp: new Date().toISOString()
   });
 });
 
 // Verify API Key endpoint (dynamically discovers active Google AI Studio models)
-app.post("/api/verify-key", async (req, res) => {
+app.post("/api/verify-key", apiLimiter, async (req, res) => {
   try {
     const rawKey = req.body.apiKey;
     if (!rawKey || typeof rawKey !== "string" || !rawKey.trim()) {
@@ -504,13 +563,17 @@ app.post("/api/clear-key", (req, res) => {
   res.json({ success: true, message: "API key cleared. System reset to VoyageAI Preview mode." });
 });
 
-// Main Chat endpoint
-app.post("/api/chat", async (req, res) => {
+// Main Chat endpoint (Rate-limited, secure server-side execution, capped output tokens)
+app.post("/api/chat", chatLimiter, async (req, res) => {
   try {
     const { message, history, apiKey: clientApiKey } = req.body;
 
     if (!message || typeof message !== "string" || !message.trim()) {
       return res.status(400).json({ error: "Message is required" });
+    }
+
+    if (message.length > 2000) {
+      return res.status(400).json({ error: "Message exceeds maximum character length of 2,000 characters." });
     }
 
     const apiKey = getEffectiveApiKey(clientApiKey || req.headers["x-api-key"]);
@@ -529,7 +592,17 @@ app.post("/api/chat", async (req, res) => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const targetModel = detectedWorkingModel || process.env.GEMINI_MODEL || "gemini-3.8-flash";
-    const formattedHistory = sanitizeHistory(history);
+    
+    // Cap conversation history to the last 15 messages to prevent token inflation & control spending
+    const cappedHistory = Array.isArray(history) ? history.slice(-15) : [];
+    const formattedHistory = sanitizeHistory(cappedHistory);
+
+    // Strict spending cap: max 2,048 output tokens per response
+    const generationConfig = {
+      maxOutputTokens: 2048,
+      temperature: 0.7,
+      topP: 0.9
+    };
 
     let responseText = "";
     let usedModel = targetModel;
@@ -540,6 +613,7 @@ app.post("/api/chat", async (req, res) => {
       const modelWithSearch = genAI.getGenerativeModel({
         model: targetModel,
         systemInstruction: SYSTEM_PROMPT,
+        generationConfig,
         tools: [{ googleSearch: {} }]
       });
       const chat = modelWithSearch.startChat({ history: formattedHistory });
@@ -553,7 +627,8 @@ app.post("/api/chat", async (req, res) => {
       try {
         const standardModel = genAI.getGenerativeModel({
           model: targetModel,
-          systemInstruction: SYSTEM_PROMPT
+          systemInstruction: SYSTEM_PROMPT,
+          generationConfig
         });
         const chat = standardModel.startChat({ history: formattedHistory });
         const result = await chat.sendMessage(message);
@@ -566,7 +641,8 @@ app.post("/api/chat", async (req, res) => {
         try {
           const directModel = genAI.getGenerativeModel({
             model: targetModel,
-            systemInstruction: SYSTEM_PROMPT
+            systemInstruction: SYSTEM_PROMPT,
+            generationConfig
           });
 
           const transcript = formattedHistory
@@ -665,9 +741,14 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// SPA fallback — serve index.html for unmatched routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+// API 404 fallback
+app.all("/api/*", (req, res) => {
+  res.status(404).json({ error: "API endpoint not found" });
+});
+
+// 404 handler — serve 404.html with status 404 for any unmatched routes
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
 });
 
 // Start server if run directly (local development)

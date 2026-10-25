@@ -159,6 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Hero Canvas particles
   initHeroParticles();
 
+  // Dynamic Year — replace all hardcoded year spans with the current year
+  const currentYear = new Date().getFullYear();
+  document.querySelectorAll('.dynamic-year').forEach(el => {
+    el.textContent = currentYear;
+  });
+
   // 1. Mobile Navigation Toggle
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
