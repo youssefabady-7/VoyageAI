@@ -143,6 +143,24 @@ function initHeroParticles() {
       ctx.fill();
     }
 
+    // Connect nearby particles with subtle neural/constellation links
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const p1 = particles[i];
+        const p2 = particles[j];
+        const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+        if (dist < 90) {
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          const opacity = (1 - dist / 90) * 0.12;
+          ctx.strokeStyle = `rgba(201, 169, 110, ${opacity})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+
     requestAnimationFrame(animate);
   }
 

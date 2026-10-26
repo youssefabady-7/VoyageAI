@@ -106,7 +106,7 @@
         <span class="logo-text">Youssef <span class="text-gold">Abady</span></span>
       </a>
       <div class="nav-links" id="navLinks">
-        <a href="index.html" class="nav-link active">Youssef Abady</a>
+        <a href="index.html" class="nav-link active">Overview</a>
         <a href="/case-study" class="nav-link">Case Study</a>
         <a href="chat.html" class="nav-link">Live Demo</a>
         <a href="#contact" class="nav-link">Contact</a>
@@ -126,22 +126,76 @@
   </nav>
 
   <!-- ===== HERO SECTION ===== -->
-  <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&q=80');">
+  <section class="hero" id="home">
+    <div class="hero-grid-bg"></div>
     <canvas id="heroParticles" class="hero-canvas"></canvas>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <span class="hero-label"><i class="fas fa-brain"></i> AI Engineer — building production LLM systems</span>
-      <h1 class="hero-title">Youssef Abady<br><span class="hero-title-gold">AI Engineer</span></h1>
-      <p class="hero-subtitle">I built VoyageAI, a deployed AI travel concierge using Google Gemini + Next.js.</p>
-      <div class="hero-buttons">
-        <a href="/case-study" class="btn btn-gold btn-lg">
+      <div class="hero-badge animate-on-scroll">
+        <span class="badge-status-dot"></span>
+        <span class="badge-text"><i class="fas fa-brain text-gold"></i> AI Engineer — building production LLM systems</span>
+      </div>
+
+      <h1 class="hero-title animate-on-scroll">
+        Hi, I’m <span class="hero-title-name">Youssef Abady</span>.<br>
+        <span class="hero-title-lead">Building Production <span class="hero-title-shimmer">LLM Systems</span>.</span>
+      </h1>
+
+      <p class="hero-subtitle animate-on-scroll">
+        I built VoyageAI, a deployed AI travel concierge using Google Gemini + Next.js.
+      </p>
+
+      <div class="hero-buttons animate-on-scroll">
+        <a href="/case-study" class="btn btn-gold btn-lg hero-cta-btn hero-cta-primary">
           <i class="fas fa-book-open"></i> Read the Engineering Case Study
         </a>
-        <a href="chat.html" class="btn btn-outline btn-lg">
+        <a href="chat.html" class="btn btn-outline btn-lg hero-cta-btn hero-cta-secondary">
           <i class="fas fa-terminal"></i> Try the Live Demo
         </a>
       </div>
+
+      <!-- Live VoyageAI Interactive Architecture Deck (Art & Creativity) -->
+      <div class="hero-interactive-deck animate-on-scroll">
+        <div class="deck-chrome">
+          <div class="deck-dots">
+            <span class="deck-dot dot-red"></span>
+            <span class="deck-dot dot-yellow"></span>
+            <span class="deck-dot dot-green"></span>
+          </div>
+          <div class="deck-title">
+            <i class="fas fa-microchip text-gold"></i> voyage-ai &bull; gemini-3.8-flash &bull; live pipeline
+          </div>
+          <div class="deck-status">
+            <span class="deck-pulse-live"></span> 280ms p50 &bull; 99.4% Uptime
+          </div>
+        </div>
+        <div class="deck-content">
+          <div class="deck-line prompt-line">
+            <span class="deck-tag tag-prompt">PROMPT</span>
+            <span class="deck-text">"Curate a 4-day Tokyo culture &amp; gastronomy tour with Michelin dining under $3,200"</span>
+          </div>
+          <div class="deck-line response-line">
+            <span class="deck-tag tag-stream">OUTPUT</span>
+            <div class="deck-chips">
+              <span class="deck-chip"><i class="fas fa-hotel text-gold"></i> TRUNK (Hotel) Shibuya &bull; $280/nt</span>
+              <span class="deck-chip"><i class="fas fa-utensils text-gold"></i> Nakiryu Michelin Ramen &bull; Confirmed</span>
+              <span class="deck-chip"><i class="fas fa-plane text-gold"></i> Live Flight API Verified</span>
+            </div>
+          </div>
+          <div class="deck-footer-bar">
+            <div class="deck-metrics">
+              <span><i class="fas fa-bolt text-gold"></i> Streaming Fallback</span>
+              <span><i class="fas fa-shield-alt text-gold"></i> Token Bucket Limiter</span>
+              <span><i class="fas fa-search-location text-gold"></i> Grounded Search</span>
+            </div>
+            <a href="chat.html" class="deck-cta-link">
+              Launch Interactive Demo <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+
     <div class="scroll-indicator" title="Click to scroll down">
       <span>Scroll to explore</span>
       <div class="scroll-chevron">
