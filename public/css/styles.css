@@ -2877,11 +2877,11 @@ body.chat-body {
 .chat-input-container {
   display: flex;
   align-items: flex-end;
-  gap: 10px;
+  gap: 12px;
   background: #F9FAFB;
   border: 2px solid #E5E7EB;
   border-radius: 16px;
-  padding: 6px 10px 6px 14px;
+  padding: 6px 12px 6px 14px;
   transition: all 0.25s ease;
   cursor: text;
 }
@@ -2895,16 +2895,22 @@ body.chat-body {
 .new-chat-btn {
   background: none;
   border: none;
+  border-right: 1px solid rgba(201, 169, 110, 0.3);
   color: #9CA3AF;
   font-size: 1rem;
   cursor: pointer;
-  padding: 8px 6px;
-  transition: color 0.2s ease;
+  padding: 8px 12px 8px 4px;
+  margin-right: 4px;
+  transition: color 0.2s ease, transform 0.25s ease;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .new-chat-btn:hover {
-  color: #0B1D3A;
+  color: #C9A96E;
+  transform: rotate(-45deg);
 }
 
 #chatInput {
@@ -2914,7 +2920,7 @@ body.chat-body {
   font-family: var(--font-body);
   font-size: 16px !important; /* Prevents mobile browser auto-zoom */
   color: #1F2937;
-  padding: 8px 0;
+  padding: 8px 14px 8px 10px; /* Space between reset button and placeholder */
   resize: none;
   max-height: 130px;
   line-height: 1.5;
@@ -4457,13 +4463,28 @@ html.theme-transitioning *::after {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  overflow: hidden;
   background: #0B1D3A;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3.5rem;
-  color: #C9A96E;
   position: relative;
+  border: 2px solid rgba(201, 169, 110, 0.4);
+}
+
+.dev-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: 50%;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+}
+
+.developer-card:hover .dev-avatar-img {
+  transform: scale(1.06);
+  filter: brightness(1.05);
 }
 
 .dev-status-tag {
@@ -5857,16 +5878,17 @@ textarea:focus-visible,
 }
 
 .developer-card:hover .dev-avatar-ring {
-  transform: scale(1.06) rotate(3deg);
+  transform: scale(1.04);
 }
 
 .dev-avatar-ring::after {
   content: '';
   position: absolute;
-  inset: -4px;
+  inset: -6px;
   border-radius: 50%;
-  border: 2px dashed rgba(201, 169, 110, 0.4);
+  border: 2px dashed rgba(201, 169, 110, 0.55);
   animation: spin 18s linear infinite;
+  pointer-events: none;
 }
 
 /* Social link hover bounce */
