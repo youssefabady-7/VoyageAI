@@ -576,7 +576,9 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
       return res.status(400).json({ error: "Message exceeds maximum character length of 2,000 characters." });
     }
 
-    const apiKey = getEffectiveApiKey(clientApiKey || req.headers["x-api-key"]);
+    const rawClientKey = clientApiKey || req.body.clientApiKey || req.headers["x-api-key"];
+    const isDemoRequested = rawClientKey === "demo" || rawClientKey === "mock";
+    const apiKey = isDemoRequested ? "" : getEffectiveApiKey(rawClientKey);
     const isMock = !apiKey;
 
     // Fallback Preview Agent if no valid API key is present
@@ -621,6 +623,9 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
       responseText = result.response.text();
       usedModel = `${targetModel} (Search Grounded)`;
     } catch (errSearch) {
+      if ((errSearch.message || "").includes("429") || (errSearch.message || "").includes("quota") || (errSearch.message || "").includes("API key not valid")) {
+        throw errSearch;
+      }
       console.warn("Strategy 1 (Search Grounded) failed, attempting standard chat:", errSearch.message);
 
       // Strategy 2: Standard Chat Session (no tools)
@@ -635,6 +640,9 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
         responseText = result.response.text();
         usedModel = targetModel;
       } catch (errChat) {
+        if ((errChat.message || "").includes("429") || (errChat.message || "").includes("quota") || (errChat.message || "").includes("API key not valid")) {
+          throw errChat;
+        }
         console.warn("Strategy 2 (Standard Chat) failed, attempting direct content generation:", errChat.message);
 
         // Strategy 3: Direct generateContent (bypasses startChat history validation)
@@ -658,49 +666,52 @@ app.post("/api/chat", chatLimiter, async (req, res) => {
         } catch (errDirect) {
           console.warn("Strategy 3 failed, querying live models for alternative candidate:", errDirect.message);
 
-          // Strategy 4: Fallback to all active models discovered via API
-          try {
-            const discovery = await queryAvailableModels(apiKey);
-            if (discovery.success && Array.isArray(discovery.models) && discovery.models.length > 0) {
-              const candidateModels = [
-                discovery.bestModel,
-                ...discovery.models.filter(m => m !== discovery.bestModel)
-              ];
+          // Strategy 4: Fallback to active models discovered via API (skip if account-wide 429 quota)
+          const isQuota = (errDirect.message || "").includes("429") || (errDirect.message || "").includes("quota");
+          if (!isQuota) {
+            try {
+              const discovery = await queryAvailableModels(apiKey);
+              if (discovery.success && Array.isArray(discovery.models) && discovery.models.length > 0) {
+                const candidateModels = [
+                  discovery.bestModel,
+                  ...discovery.models.filter(m => m !== discovery.bestModel)
+                ].slice(0, 2);
 
-              for (const candidate of candidateModels) {
-                if (!candidate) continue;
-                try {
-                  const altModel = genAI.getGenerativeModel({
-                    model: candidate,
-                    systemInstruction: SYSTEM_PROMPT
-                  });
-                  const r = await altModel.generateContent(message);
-                  if (r && r.response) {
-                    responseText = r.response.text();
-                    usedModel = candidate;
-                    detectedWorkingModel = candidate;
-                    break;
-                  }
-                } catch (candidateErr) {
-                  // Try direct prompt without systemInstruction for older/simpler model candidates
+                for (const candidate of candidateModels) {
+                  if (!candidate) continue;
                   try {
-                    const fallbackPlain = genAI.getGenerativeModel({ model: candidate });
-                    const r2 = await fallbackPlain.generateContent(`${SYSTEM_PROMPT}\n\nClient: ${message}\n\nAgent:`);
-                    if (r2 && r2.response) {
-                      responseText = r2.response.text();
+                    const altModel = genAI.getGenerativeModel({
+                      model: candidate,
+                      systemInstruction: SYSTEM_PROMPT
+                    });
+                    const r = await altModel.generateContent(message);
+                    if (r && r.response) {
+                      responseText = r.response.text();
                       usedModel = candidate;
                       detectedWorkingModel = candidate;
                       break;
                     }
-                  } catch (e2) {}
+                  } catch (candidateErr) {
+                    // Try direct prompt without systemInstruction for older/simpler model candidates
+                    try {
+                      const fallbackPlain = genAI.getGenerativeModel({ model: candidate });
+                      const r2 = await fallbackPlain.generateContent(`${SYSTEM_PROMPT}\n\nClient: ${message}\n\nAgent:`);
+                      if (r2 && r2.response) {
+                        responseText = r2.response.text();
+                        usedModel = candidate;
+                        detectedWorkingModel = candidate;
+                        break;
+                      }
+                    } catch (e2) {}
+                  }
                 }
               }
+            } catch (errAlt) {
+              geminiError = errAlt;
             }
-            if (!responseText) {
-              geminiError = errDirect;
-            }
-          } catch (errAlt) {
-            geminiError = errAlt;
+          }
+          if (!responseText) {
+            geminiError = errDirect;
           }
         }
       }
