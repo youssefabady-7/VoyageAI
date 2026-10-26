@@ -5473,3 +5473,60 @@ html.theme-transitioning *::after {
     break-inside: avoid;
   }
 }
+
+/* ============================================
+   ACCESSIBILITY: WCAG 2.2 AA FOCUS INDICATORS
+   ============================================ */
+:focus-visible {
+  outline: 2px solid #C9A96E !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 4px rgba(201, 169, 110, 0.25) !important;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #C9A96E !important;
+  outline-offset: 2px !important;
+}
+
+/* ============================================
+   ACCESSIBILITY: REDUCED MOTION PREFERENCES
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-canvas,
+  #heroParticles {
+    display: none !important;
+  }
+
+  .hero-scroll-indicator,
+  .scroll-chevron,
+  .pulse-dot {
+    animation: none !important;
+  }
+
+  .animate-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* High Contrast Adjustments */
+.dark-theme,
+[data-theme="dark"] {
+  --text-muted: #CBD5E1;
+  --text-body: #F1F5F9;
+}

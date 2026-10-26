@@ -154,25 +154,32 @@
     </div>
 
     <!-- Active Chat Messages Container -->
-    <div class="chat-container" id="chatContainer" style="display:none;">
-      <div class="chat-messages" id="chatMessages">
+    <div class="chat-container" id="chatContainer" style="display:none;" role="region" aria-label="Chat conversation">
+      <div class="chat-messages" id="chatMessages" aria-live="polite" aria-atomic="false">
         <!-- Messages injected dynamically by chat.js -->
       </div>
     </div>
 
     <!-- Input Area (Fixed at bottom) -->
-    <div class="chat-input-area">
+    <div class="chat-input-area" role="form" aria-label="Message composition">
+      <div class="chat-sample-bar" id="chatSampleBar" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn-sample-prompt" id="samplePromptBtn" style="background: rgba(201, 169, 110, 0.15); border: 1px solid rgba(201, 169, 110, 0.4); color: #E8D5A8; font-size: 0.8rem; border-radius: 20px; padding: 4px 14px; cursor: pointer; transition: all 0.2s ease;">
+          <i class="fas fa-magic"></i> Try a sample itinerary: "7 days in Paris under $2,500"
+        </button>
+      </div>
       <div class="chat-input-container">
-        <button class="new-chat-btn" id="newChatBtn" title="Reset and start a new conversation">
+        <button class="new-chat-btn" id="newChatBtn" title="Reset and start a new conversation" aria-label="Reset and start new conversation">
           <i class="fas fa-redo-alt"></i>
         </button>
+        <label for="chatInput" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">Type your travel query or destination wishes</label>
         <textarea 
           id="chatInput" 
           placeholder="Ask me anything: 'Plan a 7-day trip to Paris for $3000' or 'Best flight to Dubai from London'..." 
           rows="1"
           maxlength="2000"
+          aria-label="Trip planning prompt"
         ></textarea>
-        <button class="send-btn" id="sendBtn" title="Send your message">
+        <button class="send-btn" id="sendBtn" title="Send your message" aria-label="Send message">
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>
