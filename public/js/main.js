@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 6. Interactive Spotlight & 3D Tilt Effect on Cards
   const interactiveCards = document.querySelectorAll(
-    '.destination-card, .feature-card, .step-card, .developer-card, .legend-card, .cs-link-card, .quick-start-btn, .destination-showcase, .quick-planner-banner'
+    '.destination-card, .feature-card, .step-card, .developer-card, .legend-card, .cs-link-card, .quick-start-btn, .destination-showcase, .quick-planner-banner, .hero-interactive-deck'
   );
   
   interactiveCards.forEach(card => {
