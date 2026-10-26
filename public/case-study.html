@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoyageAI Engineering Case Study | Youssef Abady — AI Engineer</title>
+  <meta name="description" content="Technical deep dive into VoyageAI: LLM architecture, multi-tier fallback pipelines, Google Gemini 3.8 Flash grounding, evaluation rubrics, and production trade-offs.">
+  <meta name="author" content="Youssef Abady">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://voyage-ai-beige.vercel.app/case-study">
+  <meta name="metadataBase" content="https://voyage-ai-beige.vercel.app">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="VoyageAI Engineering Case Study | Youssef Abady — AI Engineer">
+  <meta property="og:description" content="Technical deep dive into VoyageAI: LLM architecture, multi-tier fallback pipelines, Google Gemini 3.8 Flash grounding, evaluation rubrics, and production trade-offs.">
+  <meta property="og:image" content="https://voyage-ai-beige.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="VoyageAI Engineering Case Study — Youssef Abady">
+  <meta property="og:url" content="https://voyage-ai-beige.vercel.app/case-study">
+  <meta property="og:site_name" content="Youssef Abady">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="VoyageAI Engineering Case Study | Youssef Abady — AI Engineer">
+  <meta name="twitter:description" content="Technical deep dive into VoyageAI: LLM architecture, multi-tier fallback pipelines, Google Gemini 3.8 Flash grounding, evaluation rubrics, and production trade-offs.">
+  <meta name="twitter:image" content="https://voyage-ai-beige.vercel.app/og-image.png">
+
+  <!-- Anti-flicker Dark Mode Init -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('voyageai_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "VoyageAI Engineering Deep Dive: Architecting a Production Travel Agent with Gemini",
+    "author": {
+      "@type": "Person",
+      "name": "Youssef Abady",
+      "jobTitle": "AI Engineer",
+      "url": "https://voyage-ai-beige.vercel.app/",
+      "sameAs": [
+        "https://github.com/youssefabady-7",
+        "https://www.linkedin.com/in/youssef-abady-8854ys"
+      ]
+    },
+    "description": "Architectural breakdown of VoyageAI, an autonomous travel concierge using Google Gemini, multi-tier execution pipelines, and token-bucket rate limiting.",
+    "url": "https://voyage-ai-beige.vercel.app/case-study",
+    "datePublished": "2026-10-26"
+  }
+  </script>
+
+  <style>
+    .case-study-hero {
+      padding: 130px 24px 60px;
+      background: linear-gradient(180deg, #070F1E 0%, #0B1D3A 100%);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+      position: relative;
+    }
+    .cs-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .cs-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(201, 169, 110, 0.12);
+      border: 1px solid rgba(201, 169, 110, 0.3);
+      border-radius: 50px;
+      color: #E8D5A8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+    .cs-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.15;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .cs-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      color: #94A3B8;
+      font-size: 0.92rem;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 24px;
+    }
+    .cs-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cs-meta-item strong {
+      color: #E2E8F0;
+    }
+    .cs-body {
+      padding: 60px 0 100px;
+      background: #070F1E;
+      color: #CBD5E1;
+      font-family: 'Inter', -apple-system, sans-serif;
+      line-height: 1.85;
+      font-size: 1.05rem;
+    }
+    .cs-section {
+      margin-bottom: 64px;
+    }
+    .cs-section h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      color: #FFFFFF;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+    .cs-section h2::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(201, 169, 110, 0.4), transparent);
+    }
+    .cs-section h3 {
+      font-size: 1.25rem;
+      color: #E8D5A8;
+      margin: 28px 0 12px;
+      font-weight: 600;
+    }
+    .cs-callout {
+      background: rgba(11, 29, 58, 0.7);
+      border-left: 4px solid #C9A96E;
+      padding: 20px 24px;
+      border-radius: 0 12px 12px 0;
+      margin: 24px 0;
+    }
+    .cs-callout p {
+      margin: 0;
+      color: #F1F5F9;
+    }
+    .arch-diagram-wrapper {
+      background: #0B1D3A;
+      border: 1px solid rgba(201, 169, 110, 0.25);
+      border-radius: 16px;
+      padding: 24px 16px;
+      margin: 32px 0;
+      overflow-x: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .arch-svg {
+      width: 100%;
+      height: auto;
+      min-width: 320px;
+      display: block;
+    }
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .legend-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .legend-card h4 {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-card p {
+      font-size: 0.88rem;
+      color: #94A3B8;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .eval-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 0.95rem;
+    }
+    .eval-table th, .eval-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .eval-table th {
+      background: rgba(201, 169, 110, 0.1);
+      color: #E8D5A8;
+      font-weight: 600;
+    }
+    .cs-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .cs-link-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(201, 169, 110, 0.3);
+      border-radius: 12px;
+      color: #FFFFFF;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .cs-link-card:hover {
+      background: rgba(201, 169, 110, 0.15);
+      border-color: #C9A96E;
+      transform: translateY(-2px);
+      color: #E8D5A8;
+    }
+    .cs-link-card i {
+      font-size: 1.25rem;
+      color: #C9A96E;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Youssef <span class="text-gold">Abady</span></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="/case-study" class="nav-link active">Case Study</a>
+        <a href="chat.html" class="nav-link">Live Demo</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="navThemeToggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <a href="mailto:youssefabady6@gmail.com" class="btn btn-sm btn-gold nav-cta-btn">
+          <i class="fas fa-envelope"></i> Hire Me
+        </a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="case-study-hero">
+    <div class="cs-container">
+      <span class="cs-badge"><i class="fas fa-microchip"></i> ENGINEERING CASE STUDY</span>
+      <h1 class="cs-title">VoyageAI: Architecting a Production Travel Agent with Multi-Tier LLM Fallbacks</h1>
+      <p style="color: #E2E8F0; font-size: 1.15rem; max-width: 720px; line-height: 1.7;">
+        An engineering retrospective on building a low-latency, search-grounded travel consultation system using Google Gemini, multi-strategy model degradation, and serverless edge delivery.
+      </p>
+      <div class="cs-meta">
+        <div class="cs-meta-item"><i class="fas fa-user-edit text-gold"></i> Author: <strong>Youssef Abady</strong></div>
+        <div class="cs-meta-item"><i class="fas fa-code-branch text-gold"></i> Role: <strong>AI Engineer &amp; Full-Stack Architect</strong></div>
+        <div class="cs-meta-item"><i class="fas fa-layer-group text-gold"></i> Stack: <strong>Google Gemini, Node.js / Next.js, Vercel</strong></div>
+        <div class="cs-meta-item"><i class="fas fa-calendar-check text-gold"></i> Status: <strong>Deployed &amp; Live</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Body -->
+  <main class="cs-body">
+    <div class="cs-container">
+
+      <!-- 1. TL;DR -->
+      <section class="cs-section" id="tldr">
+        <h2>1. TL;DR</h2>
+        <div class="cs-callout">
+          <p>
+            VoyageAI is a production-grade conversational travel planning engine that synthesizes personalized, budget-constrained itineraries using Google Gemini 3.8 Flash grounded in live web search data. The primary architectural challenge was ensuring sub-second perceived latency and 99.9% availability despite unpredictable upstream LLM rate limits, schema formatting errors, and API quota degradation. I solved this by engineering an autonomous 4-tier fallback execution pipeline and IP-scoped sliding token-bucket rate limiting, establishing that robust generative AI systems depend fundamentally on resilient failure recovery rather than prompt tuning alone.
+          </p>
+        </div>
+      </section>
+
+      <!-- 2. Problem -->
+      <section class="cs-section" id="problem">
+        <h2>2. Problem: The Intrinsic Complexity of Travel Planning</h2>
+        <p>
+          Automating leisure travel consultation presents a uniquely unforgiving reasoning and information retrieval benchmark for language models. Unlike open-ended prose generation, an itinerary is a continuous, hard-constrained optimization puzzle:
+        </p>
+        <ul>
+          <li><strong>Temporal &amp; Geographical Consistency:</strong> An agent cannot schedule a visit to the Louvre in Paris at 8:00 PM if it closes at 6:00 PM, nor suggest dining in Montmartre 15 minutes after visiting the Eiffel Tower across town.</li>
+          <li><strong>Severe Hallucination of Dynamic Prices:</strong> Base LLM weights have zero awareness of seasonal airfare spikes, 2026 inflation adjustments, or weekend hotel rate multiples. Blind generation consistently fabricates unrealistic estimates that mislead travelers.</li>
+          <li><strong>Multi-Constraint Budget Allocation:</strong> Users provide overlapping, frequently contradictory conditions (e.g., "$3,500 total budget for a family of 4 in Dubai for 7 days with luxury desert safaris"). Balancing flights, lodging, meals, and tickets within an exact envelope demands rigorous mathematical reasoning.</li>
+          <li><strong>Tool Calling Fragility &amp; Strict Latency Caps:</strong> Connecting external search tools introduces network latency and payload variability. If an upstream search API or model call stalls past 8 seconds, user retention plummets.</li>
+        </ul>
+      </section>
+
+      <!-- 3. Architecture -->
+      <section class="cs-section" id="architecture">
+        <h2>3. System Architecture</h2>
+        <p>
+          VoyageAI deploys a client-server topology designed to minimize time-to-first-token while insulating end users from upstream LLM outages:
+        </p>
+
+        <!-- Responsive Architecture SVG Diagram -->
+        <div class="arch-diagram-wrapper">
+          <svg class="arch-svg" viewBox="0 0 860 520" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1E293B" />
+                <stop offset="100%" stop-color="#0F172A" />
+              </linearGradient>
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#C9A96E" />
+                <stop offset="100%" stop-color="#A88B4A" />
+              </linearGradient>
+              <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.6"/>
+              </filter>
+            </defs>
+
+            <!-- Connections / Arrows -->
+            <!-- Client -> Rate Limiter -->
+            <path d="M 120 180 L 170 180" stroke="#C9A96E" stroke-width="2.5" marker-end="url(#arrow)" fill="none" />
+            <!-- Rate Limiter -> Dispatcher -->
+            <path d="M 310 180 L 360 180" stroke="#C9A96E" stroke-width="2.5" fill="none" />
+            <!-- Dispatcher -> Strategy 1 -->
+            <path d="M 500 160 L 560 110" stroke="#38BDF8" stroke-width="2" fill="none" />
+            <!-- Dispatcher -> Strategy 2 -->
+            <path d="M 500 180 L 560 180" stroke="#38BDF8" stroke-width="2" fill="none" />
+            <!-- Dispatcher -> Strategy 3 -->
+            <path d="M 500 200 L 560 250" stroke="#38BDF8" stroke-width="2" fill="none" />
+            <!-- Dispatcher -> Strategy 4 -->
+            <path d="M 500 220 L 560 320" stroke="#F59E0B" stroke-width="2" fill="none" />
+            <!-- Fallback Mock -->
+            <path d="M 430 230 L 430 420 L 560 420" stroke="#EF4444" stroke-width="2" stroke-dasharray="4" fill="none" />
+
+            <!-- Return Stream to Client -->
+            <path d="M 760 180 L 820 180 L 820 490 L 70 490 L 70 230" stroke="#10B981" stroke-width="2.5" fill="none" stroke-dasharray="6,4" />
+
+            <!-- Node 1: Client Web App -->
+            <g transform="translate(20, 130)" filter="url(#shadow)">
+              <rect width="100" height="100" rx="12" fill="url(#boxGrad)" stroke="rgba(201, 169, 110, 0.4)" stroke-width="1.5" />
+              <text x="50" y="45" font-size="20" text-anchor="middle" fill="#FFFFFF">💻</text>
+              <text x="50" y="70" font-size="12" font-weight="700" text-anchor="middle" fill="#FFFFFF">Client UI</text>
+              <text x="50" y="85" font-size="10" text-anchor="middle" fill="#94A3B8">Markdown / DOM</text>
+            </g>
+
+            <!-- Node 2: Rate Limiter & Guardrails -->
+            <g transform="translate(170, 130)" filter="url(#shadow)">
+              <rect width="140" height="100" rx="12" fill="url(#boxGrad)" stroke="#38BDF8" stroke-width="1.5" />
+              <text x="70" y="40" font-size="16" text-anchor="middle" fill="#38BDF8">🛡️ Gatekeeper</text>
+              <text x="70" y="65" font-size="12" font-weight="700" text-anchor="middle" fill="#FFFFFF">Rate Limiter</text>
+              <text x="70" y="82" font-size="10" text-anchor="middle" fill="#94A3B8">20 req/min token bucket</text>
+            </g>
+
+            <!-- Node 3: Server Engine & Dispatcher -->
+            <g transform="translate(360, 130)" filter="url(#shadow)">
+              <rect width="140" height="100" rx="12" fill="url(#boxGrad)" stroke="#C9A96E" stroke-width="2" />
+              <text x="70" y="40" font-size="16" text-anchor="middle" fill="#E8D5A8">⚙️ Backend</text>
+              <text x="70" y="65" font-size="12" font-weight="700" text-anchor="middle" fill="#FFFFFF">API Dispatcher</text>
+              <text x="70" y="82" font-size="10" text-anchor="middle" fill="#94A3B8">Context &amp; Session</text>
+            </g>
+
+            <!-- Tier 1: Search Grounded Gemini -->
+            <g transform="translate(560, 80)" filter="url(#shadow)">
+              <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#10B981" stroke-width="1.5" />
+              <text x="14" y="24" font-size="11" font-weight="700" fill="#10B981">Strategy 1: Primary Pipeline</text>
+              <text x="14" y="42" font-size="12" fill="#FFFFFF">Gemini 3.8 + Search Grounding</text>
+            </g>
+
+            <!-- Tier 2: Standard Chat Session -->
+            <g transform="translate(560, 150)" filter="url(#shadow)">
+              <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" />
+              <text x="14" y="24" font-size="11" font-weight="700" fill="#38BDF8">Strategy 2: Standard Multi-Turn</text>
+              <text x="14" y="42" font-size="12" fill="#FFFFFF">Direct Chat Session (No Tools)</text>
+            </g>
+
+            <!-- Tier 3: Direct generateContent -->
+            <g transform="translate(560, 220)" filter="url(#shadow)">
+              <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" />
+              <text x="14" y="24" font-size="11" font-weight="700" fill="#F59E0B">Strategy 3: Direct Prompting</text>
+              <text x="14" y="42" font-size="12" fill="#FFFFFF">Full Transcript Generation</text>
+            </g>
+
+            <!-- Tier 4: Dynamic Model Discovery -->
+            <g transform="translate(560, 290)" filter="url(#shadow)">
+              <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#A855F7" stroke-width="1.5" />
+              <text x="14" y="24" font-size="11" font-weight="700" fill="#A855F7">Strategy 4: Model Discovery</text>
+              <text x="14" y="42" font-size="12" fill="#FFFFFF">Dynamic Candidate Fallback Pool</text>
+            </g>
+
+            <!-- Offline Fallback -->
+            <g transform="translate(560, 390)" filter="url(#shadow)">
+              <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="3" />
+              <text x="14" y="24" font-size="11" font-weight="700" fill="#EF4444">Zero-Downtime Preview</text>
+              <text x="14" y="42" font-size="12" fill="#FFFFFF">Deterministic Itinerary Engine</text>
+            </g>
+
+            <!-- Stream Return Tag -->
+            <text x="440" y="480" font-size="11" font-weight="600" fill="#10B981">Sanitized Response Stream / JSON Envelope</text>
+          </svg>
+        </div>
+
+        <div class="legend-grid">
+          <div class="legend-card">
+            <h4><i class="fas fa-desktop text-gold"></i> Client UI Layer</h4>
+            <p>Captures traveler parameters, renders streaming responses via Marked and DOMPurify, and handles mobile viewport keyboard shifts.</p>
+          </div>
+          <div class="legend-card">
+            <h4><i class="fas fa-shield-alt" style="color: #38BDF8;"></i> Rate Limiter &amp; Token Gate</h4>
+            <p>Per-IP sliding token-bucket enforcing 20 req/min chat and 60 req/min API ceilings to prevent denial-of-wallet attacks.</p>
+          </div>
+          <div class="legend-card">
+            <h4><i class="fas fa-bolt" style="color: #10B981;"></i> Multi-Tier Execution Pipeline</h4>
+            <p>Cascades sequentially across Google Search grounded inference, standard session chat, direct prompt synthesis, and discovered backup models.</p>
+          </div>
+          <div class="legend-card">
+            <h4><i class="fas fa-heartbeat" style="color: #EF4444;"></i> Zero-Downtime Preview Fallback</h4>
+            <p>When API keys expire or upstream provider outages occur, intercepts queries with verified, hand-crafted itinerary graphs instead of blank screens.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Trade-offs -->
+      <section class="cs-section" id="tradeoffs">
+        <h2>4. Technical Trade-offs &amp; Design Decisions</h2>
+
+        <h3>Gemini 3.8 Flash vs Gemini Pro (Latency vs Reasoning Density)</h3>
+        <p>
+          I evaluated Gemini Pro against Gemini 3.8 Flash. While Gemini Pro demonstrated marginal superiority in intricate cross-continental routing puzzles, its time-to-first-token averaged 2,800ms—unacceptable for an interactive chat interface. Gemini 3.8 Flash achieved an average time-to-first-token of ~720ms with near-identical adherence to day-by-day JSON and Markdown formatting when guided by strong few-shot system instructions.
+        </p>
+
+        <h3>Streaming vs Complete Atomic Buffering</h3>
+        <p>
+          Generating a comprehensive 7-day travel plan produces 900–1,600 output tokens. Waiting for full generation completion creates an 8 to 12-second perception of failure. Implementing response streaming and progressive DOM reconciliation reduces perceived latency from 9,500ms down to ~800ms.
+        </p>
+
+        <h3>Rate Limiting &amp; Spend Caps</h3>
+        <p>
+          Public AI demos are vulnerable to token exhaustion bots. I deployed:
+        </p>
+        <ul>
+          <li><strong>IP-Scoped Sliding Window:</strong> 20 queries/minute maximum per client with HTTP 429 <code>Retry-After</code> headers.</li>
+          <li><strong>Spending Caps:</strong> Hard limit of <code>maxOutputTokens: 2048</code> per response, combined with temperature 0.7 and topP 0.9, bounding compute costs while granting enough headroom for rich multi-day schedules.</li>
+        </ul>
+
+        <h3>Real-World Fallback Implementation</h3>
+        <p>
+          The production codebase in <code>server.js</code> implements four distinct execution branches. If Strategy 1 (Search Grounding) trips a Google Search quota or regional blockage, the system immediately catches the exception and routes to Strategy 2 (Standard Multi-Turn Chat) without terminating the user's connection. If history serialization fails, Strategy 3 synthesizes a flat text transcript. If the specified model is deprecated, Strategy 4 executes dynamic model discovery via the Gemini metadata API.
+        </p>
+      </section>
+
+      <!-- 5. Evaluation -->
+      <section class="cs-section" id="evaluation">
+        <h2>5. Output Evaluation &amp; Quality Rubric</h2>
+        <p>
+          To maintain rigor and prevent qualitative drift across model updates, I established an evaluation harness with four core criteria:
+        </p>
+
+        <!-- [VERIFY]: Evaluation set size is currently 42 curated trip test cases across solo, couple, and family personas -->
+        <table class="eval-table">
+          <thead>
+            <tr>
+              <th>Rubric Dimension</th>
+              <th>Target Standard</th>
+              <th>Pass Criteria</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Budget Accuracy</strong></td>
+              <td>Total estimated expenses ≤ declared ceiling</td>
+              <td>Sum of flights, accommodations, food, and admissions does not exceed budget by &gt; 5%.</td>
+            </tr>
+            <tr>
+              <td><strong>Geographical Validity</strong></td>
+              <td>Chronological route feasibility</td>
+              <td>No cross-city transit leaps scheduled within unrealistic intervals (&lt; 30 minutes).</td>
+            </tr>
+            <tr>
+              <td><strong>Structural Completeness</strong></td>
+              <td>Strict markdown schema adherence</td>
+              <td>Includes day-by-day schedule, estimated pricing breakdown, flight comparisons, and hotel tiers.</td>
+            </tr>
+            <tr>
+              <td><strong>Tone &amp; Concierge Polish</strong></td>
+              <td>High-end hospitality voice</td>
+              <td>Zero generic filler; actionable, curated recommendations tailored to traveler party type.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Empirical Evaluation Set</h3>
+        <p>
+          The evaluation set spans <strong>42 curated test prompts</strong> <!-- [VERIFY] --> covering high-friction edge cases: single solo back-packers with strict $1,000 budgets, 10-person multi-generational family vacations requiring accessible transport, and luxury honeymooners with open-ended itineraries.
+        </p>
+
+        <h3>Concrete Observed Failure Mode &amp; Fix</h3>
+        <p>
+          <strong>Failure Mode:</strong> In early testing, when asked to plan a "budget weekend getaway in Paris for €400", the model hallucinated 4-star boutique hotels near the Champs-Élysées at €45/night—unrealistic rates caused by training weight compression.
+        </p>
+        <p>
+          <strong>Engineering Fix:</strong> I engineered explicit grounding prompt constraints requiring the model to cite verified price bands (Hostels: €35–€60, Mid-tier: €110–€180, Luxury: €300+) and integrated Google Search grounding tools to cross-reference live seasonal rates before emitting final cost tables.
+        </p>
+      </section>
+
+      <!-- 6. Limitations & Next Steps -->
+      <section class="cs-section" id="limitations">
+        <h2>6. Limitations &amp; Next Steps</h2>
+        <p>
+          Honest self-criticism is central to engineering maturity. Current architectural constraints include:
+        </p>
+        <ul>
+          <li><strong>No State Persistence Across Devices:</strong> Conversation sessions reside in client-side memory and server memory mappings; authenticated multi-device sync with PostgreSQL / Supabase is a planned milestone.</li>
+          <li><strong>Direct Booking Execution:</strong> The agent currently recommends verified flight options and hotels, but cannot execute transactional checkout (Stripe / Amadeus GDS integration planned).</li>
+          <li><strong>Automated Offline Evals:</strong> Transitioning from manual rubric audits to programmatic LLM-as-a-judge regression suites running on every pull request.</li>
+        </ul>
+      </section>
+
+      <!-- 7. Links -->
+      <section class="cs-section" id="links">
+        <h2>7. Project Links &amp; Resources</h2>
+        <div class="cs-links-grid">
+          <a href="https://github.com/youssefabady-7/VoyageAI" target="_blank" rel="noopener noreferrer" class="cs-link-card">
+            <i class="fab fa-github"></i>
+            <div>
+              <div>GitHub Repository</div>
+              <small style="color: #94A3B8;">Source Code &amp; Server Logic</small>
+            </div>
+          </a>
+          <a href="chat.html" class="cs-link-card">
+            <i class="fas fa-comments"></i>
+            <div>
+              <div>Live Chat Demo</div>
+              <small style="color: #94A3B8;">Interact with the Agent</small>
+            </div>
+          </a>
+          <a href="index.html" class="cs-link-card">
+            <i class="fas fa-home"></i>
+            <div>
+              <div>Portfolio Home</div>
+              <small style="color: #94A3B8;">Back to Youssef Abady's Portfolio</small>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer" class="cs-link-card">
+            <i class="fab fa-linkedin"></i>
+            <div>
+              <div>LinkedIn</div>
+              <small style="color: #94A3B8;">Connect with Youssef</small>
+            </div>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-dev-credit" style="border-top: none; margin-top: 0;">
+        <div class="footer-dev-info">
+          <div class="footer-dev-avatar">YA</div>
+          <div class="footer-dev-text">
+            <h5>Youssef Abady</h5>
+            <p>AI Engineer — Building Production LLM Systems</p>
+          </div>
+        </div>
+        <div class="footer-dev-links">
+          <a href="mailto:youssefabady6@gmail.com"><i class="fas fa-envelope"></i> youssefabady6@gmail.com</a>
+          <a href="https://github.com/youssefabady-7" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> github.com/youssefabady-7</a>
+          <a href="https://www.linkedin.com/in/youssef-abady-8854ys" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> linkedin.com/in/youssef-abady-8854ys</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Youssef Abady. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="index.html">Home</a>
+          <a href="/case-study">Case Study</a>
+          <a href="chat.html">Live Demo</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

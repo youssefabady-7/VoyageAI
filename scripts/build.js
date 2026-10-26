@@ -73,4 +73,49 @@ for (const reqStr of requiredStrings) {
   }
 }
 
+// 6. Verify case-study.html and all 7 required sections
+console.log('Verifying case-study.html sections and diagram...');
+const csPath = path.join(publicDir, 'case-study.html');
+if (!fs.existsSync(csPath)) {
+  throw new Error('case-study.html missing');
+}
+const csContent = fs.readFileSync(csPath, 'utf8');
+const requiredCsSections = [
+  'id="tldr"',
+  'id="problem"',
+  'id="architecture"',
+  'id="tradeoffs"',
+  'id="evaluation"',
+  'id="limitations"',
+  'id="links"',
+  '<svg class="arch-svg"',
+  '<!-- [VERIFY]'
+];
+
+for (const sec of requiredCsSections) {
+  if (!csContent.includes(sec)) {
+    throw new Error(`case-study.html missing required element: ${sec}`);
+  }
+}
+
+// 7. Validate JSON-LD Schema syntax
+console.log('Validating JSON-LD schemas...');
+function validateJsonLd(content, filename) {
+  const matches = content.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi);
+  if (!matches || matches.length === 0) {
+    throw new Error(`No JSON-LD scripts found in ${filename}`);
+  }
+  for (const m of matches) {
+    const rawJson = m.replace(/<\/?script[^>]*>/gi, '').trim();
+    const parsed = JSON.parse(rawJson);
+    if (!parsed['@context']) {
+      throw new Error(`JSON-LD in ${filename} missing @context`);
+    }
+  }
+}
+
+validateJsonLd(indexContent, 'index.html');
+validateJsonLd(csContent, 'case-study.html');
+console.log('JSON-LD schemas are valid JSON with @context.');
+
 console.log('=== Build & Validation Passed Successfully! ===');

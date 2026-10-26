@@ -746,6 +746,11 @@ app.all("/api/*", (req, res) => {
   res.status(404).json({ error: "API endpoint not found" });
 });
 
+// Direct route for engineering case study
+app.get("/case-study", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "case-study.html"));
+});
+
 // 404 handler — serve 404.html with status 404 for any unmatched routes
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
