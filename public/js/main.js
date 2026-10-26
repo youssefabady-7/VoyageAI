@@ -296,26 +296,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. 3D Tilt Effect on Destination Cards & Steps
-  const tiltCards = document.querySelectorAll('.destination-card, .feature-card, .step-card');
-  tiltCards.forEach(card => {
+  // 6. Interactive Spotlight & 3D Tilt Effect on Cards
+  const interactiveCards = document.querySelectorAll(
+    '.destination-card, .feature-card, .step-card, .developer-card, .legend-card, .cs-link-card, .quick-start-btn, .destination-showcase, .quick-planner-banner'
+  );
+  
+  interactiveCards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
+      
+      // Update mouse spotlight coordinates
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+
+      // Gentle 3D perspective tilt
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -4;
-      const rotateY = ((x - centerX) / centerX) * 4;
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+      const rotateX = ((y - centerY) / centerY) * -3.5;
+      const rotateY = ((x - centerX) / centerX) * 3.5;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
     });
 
     card.addEventListener('mouseleave', () => {
       card.style.transform = '';
+      card.style.setProperty('--mouse-x', '-999px');
+      card.style.setProperty('--mouse-y', '-999px');
     });
   });
 
-  // 7. Privacy Page TOC active spy
+  // 7. Staggered Cascade Delays for Grid Children
+  document.querySelectorAll('.steps-grid, .features-grid, .destinations-grid, .legend-grid, .cs-links-grid, .quick-start-grid').forEach(grid => {
+    Array.from(grid.children).forEach((child, idx) => {
+      child.style.transitionDelay = `${idx * 0.09}s`;
+    });
+  });
+
+  // 8. Floating Back-to-Top Button
+  let backToTopBtn = document.getElementById('backToTopBtn');
+  if (!backToTopBtn && document.body) {
+    backToTopBtn = document.createElement('button');
+    backToTopBtn.id = 'backToTopBtn';
+    backToTopBtn.className = 'back-to-top-btn';
+    backToTopBtn.setAttribute('aria-label', 'Back to top of page');
+    backToTopBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    document.body.appendChild(backToTopBtn);
+
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 450) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // 9. Privacy Page TOC active spy
   const tocLinks = document.querySelectorAll('.toc-link');
   if (tocLinks.length > 0) {
     const sections = document.querySelectorAll('.privacy-section');

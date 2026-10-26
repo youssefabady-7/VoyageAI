@@ -5530,3 +5530,351 @@ textarea:focus-visible,
   --text-muted: #CBD5E1;
   --text-body: #F1F5F9;
 }
+
+/* ============================================================
+   COOL MODERN ANIMATIONS SUITE (ALL PAGES)
+   ============================================================ */
+
+/* 1. Interactive Spotlight Cards */
+.feature-card,
+.step-card,
+.destination-card,
+.developer-card,
+.legend-card,
+.cs-link-card,
+.quick-start-btn,
+.showcase-inner,
+.quick-planner-banner {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+.feature-card::before,
+.step-card::before,
+.destination-card::before,
+.developer-card::before,
+.legend-card::before,
+.cs-link-card::before,
+.quick-start-btn::before,
+.showcase-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(420px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(201, 169, 110, 0.16), transparent 50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 1;
+}
+
+.feature-card:hover::before,
+.step-card:hover::before,
+.destination-card:hover::before,
+.developer-card:hover::before,
+.legend-card:hover::before,
+.cs-link-card:hover::before,
+.quick-start-btn:hover::before,
+.showcase-inner:hover::before {
+  opacity: 1;
+}
+
+.feature-card:hover,
+.step-card:hover,
+.legend-card:hover,
+.cs-link-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(201, 169, 110, 0.55) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 24px rgba(201, 169, 110, 0.16);
+}
+
+/* 2. Hero Gold Shimmer & Staggered Entrance */
+@keyframes titleShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.hero-title-gold {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5E6C4 20%, #C9A96E 50%, #DFC182 80%, #FFFFFF 100%);
+  background-size: 250% 250%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleShimmer 7s ease-in-out infinite;
+}
+
+.hero-label {
+  animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+}
+
+.hero-title {
+  animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s backwards;
+}
+
+.hero-subtitle {
+  animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s backwards;
+}
+
+.hero-buttons {
+  animation: heroEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s backwards;
+}
+
+@keyframes heroEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 3. Button Light-Sweep Shimmer */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+
+.btn-gold::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -80%;
+  width: 50%;
+  height: 220%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+.btn-gold:hover::after {
+  left: 140%;
+  transition: left 0.75s ease-in-out;
+}
+
+.btn-gold:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(201, 169, 110, 0.45);
+}
+
+.btn-gold:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.btn-outline {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.btn-outline:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
+}
+
+.btn-outline:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* 4. Live Radar Ping on Online Status Dots */
+@keyframes radarPing {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.pulse-dot,
+.status-indicator.online {
+  animation: radarPing 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+}
+
+/* 5. Chat Compass Levitation & Micro-Interactions */
+@keyframes compassLevitate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    filter: drop-shadow(0 8px 20px rgba(201, 169, 110, 0.3));
+  }
+  50% {
+    transform: translateY(-10px) rotate(4deg);
+    filter: drop-shadow(0 18px 32px rgba(201, 169, 110, 0.55));
+  }
+}
+
+.welcome-icon,
+.error-icon {
+  animation: compassLevitate 4.5s ease-in-out infinite;
+}
+
+.quick-start-btn {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.quick-start-btn:hover {
+  transform: translateY(-4px) scale(1.015);
+  border-color: rgba(201, 169, 110, 0.65) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 18px rgba(201, 169, 110, 0.2);
+}
+
+.quick-start-btn:hover .qs-icon {
+  transform: scale(1.2) rotate(6deg);
+  color: #E8D5A8;
+}
+
+.qs-icon {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+}
+
+/* Chat Input Focus Glow Aura */
+.chat-input-container {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chat-input-container:focus-within {
+  border-color: #C9A96E !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.25), 0 10px 32px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Sample Itinerary Pill Pulse */
+@keyframes samplePulse {
+  0%, 100% {
+    border-color: rgba(201, 169, 110, 0.4);
+    box-shadow: 0 0 0 rgba(201, 169, 110, 0);
+  }
+  50% {
+    border-color: rgba(201, 169, 110, 0.9);
+    box-shadow: 0 0 14px rgba(201, 169, 110, 0.35);
+  }
+}
+
+.btn-sample-prompt {
+  animation: samplePulse 3s ease-in-out infinite;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease !important;
+}
+
+.btn-sample-prompt:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: rgba(201, 169, 110, 0.28) !important;
+  border-color: #E8D5A8 !important;
+}
+
+/* 6. Destination Showcase Hover Zoom & Parallax */
+.showcase-images img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+}
+
+.showcase-images:hover img:first-child {
+  transform: scale(1.05) translateY(-4px);
+  filter: brightness(1.06);
+}
+
+.showcase-images:hover img:last-child {
+  transform: scale(1.05) translateY(4px);
+  filter: brightness(1.06);
+}
+
+.showcase-flag {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.destination-showcase:hover .showcase-flag {
+  transform: scale(1.25) rotate(-6deg);
+}
+
+/* 7. Floating Back to Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0B1D3A, #153156);
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  color: #E8D5A8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.35s, box-shadow 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.back-to-top-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+  border-color: #C9A96E;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(201, 169, 110, 0.4);
+  color: #FFFFFF;
+}
+
+.back-to-top-btn:active {
+  transform: translateY(-1px) scale(0.95);
+}
+
+/* 8. 404 Floating Error Code Breathing Glow */
+@keyframes errorGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(201, 169, 110, 0.25));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 45px rgba(201, 169, 110, 0.65));
+    transform: scale(1.02);
+  }
+}
+
+.error-code {
+  animation: errorGlowPulse 4s ease-in-out infinite;
+}
+
+/* 9. Developer Spotlight Card Glow Ring */
+.dev-avatar-ring {
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.developer-card:hover .dev-avatar-ring {
+  transform: scale(1.06) rotate(3deg);
+}
+
+.dev-avatar-ring::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px dashed rgba(201, 169, 110, 0.4);
+  animation: spin 18s linear infinite;
+}
+
+/* Social link hover bounce */
+.dev-action-btn {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.25s ease !important;
+}
+
+.dev-action-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}

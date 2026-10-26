@@ -180,6 +180,28 @@
       margin: 32px 0;
       overflow-x: auto;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    @keyframes flowDash {
+      to {
+        stroke-dashoffset: -32;
+      }
+    }
+    .arch-flow-path {
+      stroke-dasharray: 8, 8;
+      animation: flowDash 1.2s linear infinite;
+    }
+    .arch-return-path {
+      stroke-dasharray: 10, 6;
+      animation: flowDash 0.9s linear infinite reverse;
+    }
+    .arch-node {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+      cursor: pointer;
+    }
+    .arch-node:hover {
+      transform: translateY(-4px) scale(1.02);
+      filter: drop-shadow(0 8px 24px rgba(201, 169, 110, 0.45));
     }
     .arch-svg {
       width: 100%;
@@ -260,6 +282,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Top Gold Scroll Progress Bar -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
 
   <!-- Navigation -->
   <nav class="navbar">
@@ -357,27 +382,27 @@
               </filter>
             </defs>
 
-            <!-- Connections / Arrows -->
+            <!-- Connections / Arrows with Live Flow Dash Animation -->
             <!-- Client -> Rate Limiter -->
-            <path d="M 120 180 L 170 180" stroke="#C9A96E" stroke-width="2.5" marker-end="url(#arrow)" fill="none" />
+            <path d="M 120 180 L 170 180" class="arch-flow-path" stroke="#C9A96E" stroke-width="2.5" fill="none" />
             <!-- Rate Limiter -> Dispatcher -->
-            <path d="M 310 180 L 360 180" stroke="#C9A96E" stroke-width="2.5" fill="none" />
+            <path d="M 310 180 L 360 180" class="arch-flow-path" stroke="#C9A96E" stroke-width="2.5" fill="none" />
             <!-- Dispatcher -> Strategy 1 -->
-            <path d="M 500 160 L 560 110" stroke="#38BDF8" stroke-width="2" fill="none" />
+            <path d="M 500 160 L 560 110" class="arch-flow-path" stroke="#38BDF8" stroke-width="2" fill="none" />
             <!-- Dispatcher -> Strategy 2 -->
-            <path d="M 500 180 L 560 180" stroke="#38BDF8" stroke-width="2" fill="none" />
+            <path d="M 500 180 L 560 180" class="arch-flow-path" stroke="#38BDF8" stroke-width="2" fill="none" />
             <!-- Dispatcher -> Strategy 3 -->
-            <path d="M 500 200 L 560 250" stroke="#38BDF8" stroke-width="2" fill="none" />
+            <path d="M 500 200 L 560 250" class="arch-flow-path" stroke="#38BDF8" stroke-width="2" fill="none" />
             <!-- Dispatcher -> Strategy 4 -->
-            <path d="M 500 220 L 560 320" stroke="#F59E0B" stroke-width="2" fill="none" />
+            <path d="M 500 220 L 560 320" class="arch-flow-path" stroke="#F59E0B" stroke-width="2" fill="none" />
             <!-- Fallback Mock -->
             <path d="M 430 230 L 430 420 L 560 420" stroke="#EF4444" stroke-width="2" stroke-dasharray="4" fill="none" />
 
             <!-- Return Stream to Client -->
-            <path d="M 760 180 L 820 180 L 820 490 L 70 490 L 70 230" stroke="#10B981" stroke-width="2.5" fill="none" stroke-dasharray="6,4" />
+            <path d="M 760 180 L 820 180 L 820 490 L 70 490 L 70 230" class="arch-return-path" stroke="#10B981" stroke-width="2.5" fill="none" />
 
             <!-- Node 1: Client Web App -->
-            <g transform="translate(20, 130)" filter="url(#shadow)">
+            <g transform="translate(20, 130)" class="arch-node" filter="url(#shadow)">
               <rect width="100" height="100" rx="12" fill="url(#boxGrad)" stroke="rgba(201, 169, 110, 0.4)" stroke-width="1.5" />
               <text x="50" y="45" font-size="20" text-anchor="middle" fill="#FFFFFF">💻</text>
               <text x="50" y="70" font-size="12" font-weight="700" text-anchor="middle" fill="#FFFFFF">Client UI</text>
@@ -385,7 +410,7 @@
             </g>
 
             <!-- Node 2: Rate Limiter & Guardrails -->
-            <g transform="translate(170, 130)" filter="url(#shadow)">
+            <g transform="translate(170, 130)" class="arch-node" filter="url(#shadow)">
               <rect width="140" height="100" rx="12" fill="url(#boxGrad)" stroke="#38BDF8" stroke-width="1.5" />
               <text x="70" y="40" font-size="16" text-anchor="middle" fill="#38BDF8">🛡️ Gatekeeper</text>
               <text x="70" y="65" font-size="12" font-weight="700" text-anchor="middle" fill="#FFFFFF">Rate Limiter</text>
@@ -393,7 +418,7 @@
             </g>
 
             <!-- Node 3: Server Engine & Dispatcher -->
-            <g transform="translate(360, 130)" filter="url(#shadow)">
+            <g transform="translate(360, 130)" class="arch-node" filter="url(#shadow)">
               <rect width="140" height="100" rx="12" fill="url(#boxGrad)" stroke="#C9A96E" stroke-width="2" />
               <text x="70" y="40" font-size="16" text-anchor="middle" fill="#E8D5A8">⚙️ Backend</text>
               <text x="70" y="65" font-size="12" font-weight="700" text-anchor="middle" fill="#FFFFFF">API Dispatcher</text>
@@ -401,35 +426,35 @@
             </g>
 
             <!-- Tier 1: Search Grounded Gemini -->
-            <g transform="translate(560, 80)" filter="url(#shadow)">
+            <g transform="translate(560, 80)" class="arch-node" filter="url(#shadow)">
               <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#10B981" stroke-width="1.5" />
               <text x="14" y="24" font-size="11" font-weight="700" fill="#10B981">Strategy 1: Primary Pipeline</text>
               <text x="14" y="42" font-size="12" fill="#FFFFFF">Gemini 3.8 + Search Grounding</text>
             </g>
 
             <!-- Tier 2: Standard Chat Session -->
-            <g transform="translate(560, 150)" filter="url(#shadow)">
+            <g transform="translate(560, 150)" class="arch-node" filter="url(#shadow)">
               <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" />
               <text x="14" y="24" font-size="11" font-weight="700" fill="#38BDF8">Strategy 2: Standard Multi-Turn</text>
               <text x="14" y="42" font-size="12" fill="#FFFFFF">Direct Chat Session (No Tools)</text>
             </g>
 
             <!-- Tier 3: Direct generateContent -->
-            <g transform="translate(560, 220)" filter="url(#shadow)">
+            <g transform="translate(560, 220)" class="arch-node" filter="url(#shadow)">
               <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" />
               <text x="14" y="24" font-size="11" font-weight="700" fill="#F59E0B">Strategy 3: Direct Prompting</text>
               <text x="14" y="42" font-size="12" fill="#FFFFFF">Full Transcript Generation</text>
             </g>
 
             <!-- Tier 4: Dynamic Model Discovery -->
-            <g transform="translate(560, 290)" filter="url(#shadow)">
+            <g transform="translate(560, 290)" class="arch-node" filter="url(#shadow)">
               <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#A855F7" stroke-width="1.5" />
               <text x="14" y="24" font-size="11" font-weight="700" fill="#A855F7">Strategy 4: Model Discovery</text>
               <text x="14" y="42" font-size="12" fill="#FFFFFF">Dynamic Candidate Fallback Pool</text>
             </g>
 
             <!-- Offline Fallback -->
-            <g transform="translate(560, 390)" filter="url(#shadow)">
+            <g transform="translate(560, 390)" class="arch-node" filter="url(#shadow)">
               <rect width="200" height="58" rx="8" fill="#1E293B" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="3" />
               <text x="14" y="24" font-size="11" font-weight="700" fill="#EF4444">Zero-Downtime Preview</text>
               <text x="14" y="42" font-size="12" fill="#FFFFFF">Deterministic Itinerary Engine</text>
