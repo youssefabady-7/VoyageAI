@@ -1758,10 +1758,10 @@ ul, ol {
 
 @keyframes float {
   0%, 100% {
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
   50% {
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateY(6px);
   }
 }
 
@@ -3830,18 +3830,17 @@ body.chat-body {
 
 /* Scroll Indicator at bottom of hero */
 .scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  margin: 36px auto 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 8px;
   color: #F1F5F9;
   font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 2px;
   text-transform: uppercase;
   z-index: 5;
   cursor: pointer;
@@ -3849,18 +3848,34 @@ body.chat-body {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
 }
 
+.scroll-indicator span {
+  display: block;
+  letter-spacing: 2px;
+  margin-right: -2px;
+  text-align: center;
+}
+
 .scroll-indicator:hover {
   color: #E8D5A8;
 }
 
 .scroll-chevron {
-  animation: float 3s ease-in-out infinite;
+  color: #E8D5A8;
   font-size: 1rem;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  animation: chevronBounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
 }
 
-.scroll-chevron i {
-  color: #E8D5A8;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+@keyframes chevronBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
 }
 
 /* Section label (above titles) */
